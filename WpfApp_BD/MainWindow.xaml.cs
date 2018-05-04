@@ -24,5 +24,16 @@ namespace WpfApp_BD
         {
             InitializeComponent();
         }
+
+        private void Label_Init_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void Label_Init_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Console.Write("123");
+            Label_Init_text.Content="2";
+        }
     }
 }
