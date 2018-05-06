@@ -136,7 +136,7 @@ namespace WpfApp_BD
                     }
                     new Thread(() =>
                     {
-                        win.Dispatcher.Invoke(new Action(() =>
+                        win.Dispatcher.BeginInvoke(new Action(() =>
                         {
 
                             win.Label_Init_text.Content = str;
@@ -164,7 +164,7 @@ namespace WpfApp_BD
                 {
                     new Thread(() =>
                     {
-                        win.Dispatcher.Invoke(new Action(() =>
+                        win.Dispatcher.BeginInvoke(new Action(() =>
                         {
 
                             win.label_txxx_xxlb_text.Content = Convert.ToString(bdxx.txxx.xxlb, 2);
@@ -196,7 +196,7 @@ namespace WpfApp_BD
                 {
                     new Thread(() =>
                     {
-                        win.Dispatcher.Invoke(new Action(() =>
+                        win.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             win.label_icxx_yhid_text.Content = Convert.ToString(bdxx.icxx.yhdz[0] * 256 * 256 + bdxx.icxx.yhdz[1] * 256 + bdxx.icxx.yhdz[2]);
                             win.label_icxx_zh_text.Content = Convert.ToString(bdxx.icxx.zh);
@@ -214,7 +214,7 @@ namespace WpfApp_BD
                 {
                     new Thread(() =>
                     {
-                        win.Dispatcher.Invoke(new Action(() =>
+                        win.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             win.label_zjxx_iczt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.iczt, 16);
                             win.label_zjxx_yjzt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.yjzt, 16);
@@ -236,33 +236,34 @@ namespace WpfApp_BD
                 }
                 if ((bdxx.print_flag & BD.PRINT_FKXX) != 0)
                 {
+                    string str = "";
+                    if (bdxx.fkxx.flbz == 0)
+                    {
+                        str = "成功,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
+                        // bdxx.SEND_BLOCKTIME = 60;
+                    }
+                    else if (bdxx.fkxx.flbz == 1)
+                        str = "失败,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
+                    else if (bdxx.fkxx.flbz == 2)
+                        str = "信号未锁定";
+                    else if (bdxx.fkxx.flbz == 3)
+                        str = "电量不足";
+                    else if (bdxx.fkxx.flbz == 4)
+                        str = "发射频度未到,时间:" + Convert.ToString(bdxx.fkxx.fjxx[3]) + "秒";
+                    else if (bdxx.fkxx.flbz == 5)
+                        str = "加解密错误";
+                    else if (bdxx.fkxx.flbz == 6)
+                        str = "CRC错误,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
+                    else if (bdxx.fkxx.flbz == 7)
+                        str = "用户级被抑制";
+                    else if (bdxx.fkxx.flbz == 8)
+                        str = "抑制解除\n";
+                    str += "  " + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
                     new Thread(() =>
                     {
-                        win.Dispatcher.Invoke(new Action(() =>
+                        win.Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            string str = "";
-                            if (bdxx.fkxx.flbz == 0)
-                            {
-                                str = "成功,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
-                                bdxx.SEND_BLOCKTIME = 60;
-                            }
-                            else if (bdxx.fkxx.flbz == 1)
-                                str = "失败,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
-                            else if (bdxx.fkxx.flbz == 2)
-                                str = "信号未锁定";
-                            else if (bdxx.fkxx.flbz == 3)
-                                str = "电量不足";
-                            else if (bdxx.fkxx.flbz == 4)
-                                str = "发射频度未到,时间:" + Convert.ToString(bdxx.fkxx.fjxx[3]) + "秒";
-                            else if (bdxx.fkxx.flbz == 5)
-                                str = "加解密错误";
-                            else if (bdxx.fkxx.flbz == 6)
-                                str = "CRC错误,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
-                            else if (bdxx.fkxx.flbz == 7)
-                                str = "用户级被抑制";
-                            else if (bdxx.fkxx.flbz == 8)
-                                str = "抑制解除\n";
-                            str += "  " + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                            
                             win.listbox_fkxx.Items.Add(new ListBoxItem().Content = str);
                         }));
                     }).Start();
@@ -270,21 +271,22 @@ namespace WpfApp_BD
                 }
                 if ((bdxx.print_flag & BD.PRINT_GNTX) != 0)
                 {
+                    sbyte sq = bdxx.gntx.sqlx;
+                    string str = "";
+                    if (sq >= 0)
+                    {
+                        str = "东";
+                    }
+                    else
+                    {
+                        str = "西";
+                        sq *= -1;
+                    }
                     new Thread(() =>
                     {
                         win.Dispatcher.Invoke(new Action(() =>
                         {
-                            sbyte sq = bdxx.gntx.sqlx;
-                            string str = "";
-                            if (sq >= 0)
-                            {
-                                str = "东";
-                            }
-                            else
-                            {
-                                str = "西";
-                                sq *= -1;
-                            }
+                            
 
                             win.label_gntx_sq_text.Content = str + Convert.ToString(sq) + "区";
                             win.label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
@@ -318,7 +320,7 @@ namespace WpfApp_BD
                     // wd= (float)bdxx.gnpx.wxm / 60
                     new Thread(() =>
                     {
-                        win.Dispatcher.Invoke(new Action(() =>
+                        win.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             win.label_gnpx_jdfw_text.Content = (char)bdxx.gnpx.jdfw;
                             win.label_gnpx_jd_text.Content = Convert.ToString(bdxx.gnpx.jd);
@@ -344,7 +346,7 @@ namespace WpfApp_BD
 
                 }
 
-
+                Thread.Sleep(100);
 
             }
 
@@ -458,6 +460,11 @@ namespace WpfApp_BD
                     textbox_txxx_dwnr.Text = HexStringToASCII(textbox_txxx_dwnr.Text);
                 }
             }
+
+        }
+
+        private void btn_setcombaud_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

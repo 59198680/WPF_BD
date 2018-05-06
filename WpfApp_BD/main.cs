@@ -18,7 +18,7 @@ namespace WpfApp_BD
             {
                 bdxx.Receive_Protocol();
                // Console.WriteLine("不带参数的线程函数");
-                Thread.Sleep(1);
+                Thread.Sleep(50);
             }
            
         }

@@ -146,6 +146,18 @@
         <TextBox x:Name="textbox_txxx_dwnr" HorizontalAlignment="Left" Height="132" Margin="283,584,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="356" Panel.ZIndex="10"/>
         <Label x:Name="label_txxx_lasttime" Content="最后通讯:" Margin="350,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White" Width="78"/>
         <Label x:Name="label_txxx_lasttime_text" Content="" Margin="426,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
+        <ComboBox x:Name="combox_baudrate" HorizontalAlignment="Left" Margin="840,752,0,0" VerticalAlignment="Top" Width="120" Panel.ZIndex="10" SelectedIndex="7">
+            <ComboBoxItem Content="1200"/>
+            <ComboBoxItem Content="2400"/>
+            <ComboBoxItem Content="4800"/>
+            <ComboBoxItem Content="9600"/>
+            <ComboBoxItem Content="19200"/>
+            <ComboBoxItem Content="38400"/>
+            <ComboBoxItem Content="57600"/>
+            <ComboBoxItem Content="115200"/>
+        </ComboBox>
+        <Button x:Name="btn_setcombaud" Content="发射!" HorizontalAlignment="Left" Margin="965,741,0,0" VerticalAlignment="Top" Width="75" Panel.ZIndex="10" Click="btn_setcombaud_Click"/>
+        <Button x:Name="btn_setbdbaud" Content="发射!" HorizontalAlignment="Left" Margin="965,770,0,0" VerticalAlignment="Top" Width="75" Panel.ZIndex="10"/>
 
     </Grid>
 </Window>

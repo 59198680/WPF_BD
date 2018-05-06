@@ -630,6 +630,10 @@ namespace BD_Protocol
             {
                 SEND_BLOCKTIME = fkxx.fjxx[3];
             }
+            if (fkxx.flbz == 1)
+            {
+                SEND_BLOCKTIME = 60;
+            }
         }
 
 
