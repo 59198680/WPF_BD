@@ -148,7 +148,7 @@ namespace WpfApp_BD
                 {
 
                 }
-                if((bdxx.print_flag & BD.PRINT_BLOCK) != 0)
+                if ((bdxx.print_flag & BD.PRINT_BLOCK) != 0)
                 {
                     new Thread(() =>
                     {
@@ -170,10 +170,10 @@ namespace WpfApp_BD
                             win.label_txxx_xxlb_text.Content = Convert.ToString(bdxx.txxx.xxlb, 2);
                             win.label_txxx_fxfd_text.Content = Convert.ToString(bdxx.txxx.fxfdz[0] * 256 * 256 + bdxx.txxx.fxfdz[1] * 256 + bdxx.txxx.fxfdz[2]);
                             win.label_txxx_fxsj_text.Content = Convert.ToString(bdxx.txxx.fxsj_h) + "时" + Convert.ToString(bdxx.txxx.fxsj_m) + "分";
-                            win.label_txxx_dwcd_text.Content = Convert.ToString(bdxx.txxx.dwcd/8.0) + "bytes(" + Convert.ToString(bdxx.txxx.dwcd) + "bits)";
+                            win.label_txxx_dwcd_text.Content = Convert.ToString(bdxx.txxx.dwcd / 8.0) + "bytes(" + Convert.ToString(bdxx.txxx.dwcd) + "bits)";
                             win.label_txxx_crc_text.Content = Convert.ToString(bdxx.txxx.crc);
-                            win.label_txxx_lasttime_text.Content= Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
-                            if (win.cb_txxx_hexordec.IsChecked==true)
+                            win.label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                            if (win.cb_txxx_hexordec.IsChecked == true)
                             {
                                 StringBuilder sb = new StringBuilder();
                                 for (int i = 0; i < bdxx.txxx.dwnr.Length; i++)
@@ -186,7 +186,7 @@ namespace WpfApp_BD
                             {
                                 win.textbox_txxx_dwnr.Text = new ASCIIEncoding().GetString(bdxx.txxx.dwnr);
                             }
-                           // win.textbox_txxx_dwnr.Text = Convert.ToString();
+                            // win.textbox_txxx_dwnr.Text = Convert.ToString();
 
                         }));
                     }).Start();
@@ -302,7 +302,7 @@ namespace WpfApp_BD
                             win.label_gnvx_bwxgs_text.Content = Convert.ToString(bdxx.gnvx.bds_wxgs);
                             win.listbox_gnvx_bwxxx.Items.Clear();
                             win.listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
-                           win.listbox_gnvx_gwxxx.Items.Clear();
+                            win.listbox_gnvx_gwxxx.Items.Clear();
                             win.listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
                             for (int i = 0; i < bdxx.gnvx.bds_wxgs; ++i)
                                 win.listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].xzb) + "db)");
@@ -314,8 +314,8 @@ namespace WpfApp_BD
                 }
                 if ((bdxx.print_flag & BD.PRINT_GNPX) != 0)
                 {
-                   // float wd, jd;
-                   // wd= (float)bdxx.gnpx.wxm / 60
+                    // float wd, jd;
+                    // wd= (float)bdxx.gnpx.wxm / 60
                     new Thread(() =>
                     {
                         win.Dispatcher.Invoke(new Action(() =>
@@ -330,13 +330,13 @@ namespace WpfApp_BD
                             win.label_gnpx_wf_text.Content = Convert.ToString(bdxx.gnpx.wf);
                             win.label_gnpx_wm_text.Content = Convert.ToString(bdxx.gnpx.wm);
                             win.label_gnpx_wxm_text.Content = Convert.ToString(bdxx.gnpx.wxm);
-                            win.label_gnpx_gd_text.Content = Convert.ToString(bdxx.gnpx.gd)+"m";
-                            win.label_gnpx_sd_text.Content = Convert.ToString(bdxx.gnpx.sd/10.0)+"m/s";
-                            win.label_gnpx_fx_text.Content = Convert.ToString(bdxx.gnpx.fx)+"°";
+                            win.label_gnpx_gd_text.Content = Convert.ToString(bdxx.gnpx.gd) + "m";
+                            win.label_gnpx_sd_text.Content = Convert.ToString(bdxx.gnpx.sd / 10.0) + "m/s";
+                            win.label_gnpx_fx_text.Content = Convert.ToString(bdxx.gnpx.fx) + "°";
                             win.label_gnpx_wxs_text.Content = Convert.ToString(bdxx.gnpx.wxs);
-                            win.label_gnpx_zt_text.Content = bdxx.gnpx.zt==1?"已定位":"未定位";
+                            win.label_gnpx_zt_text.Content = bdxx.gnpx.zt == 1 ? "已定位" : "未定位";
                             win.label_gnpx_jdxs_text.Content = Convert.ToString(bdxx.gnpx.jdxs);
-                            win.label_gnpx_gjwc_text.Content = Convert.ToString(bdxx.gnpx.gjwc/10.0)+"m";
+                            win.label_gnpx_gjwc_text.Content = Convert.ToString(bdxx.gnpx.gjwc / 10.0) + "m";
                             win.textbox_gnpx_zhzb.Text = Convert.ToString((((bdxx.gnpx.wxm / 60.0) + bdxx.gnpx.wm) / 60.0 + bdxx.gnpx.wf) / 60.0 + bdxx.gnpx.wd) + "," + Convert.ToString((((bdxx.gnpx.jxm / 60.0) + bdxx.gnpx.jm) / 60.0 + bdxx.gnpx.jf) / 60.0 + bdxx.gnpx.jd);
                         }));
                     }).Start();
@@ -372,7 +372,7 @@ namespace WpfApp_BD
         /// <returns></returns>
         private string strToHexByte(string hexString)
         {
-            byte[] bs =null;
+            byte[] bs = null;
             //System.Text.Encoding.Convert(System.Text.Encoding.Unicode,System.Text.Encoding.ASCII,bs);
             bs = System.Text.Encoding.ASCII.GetBytes(hexString.Trim());
             // hexString= new ASCIIEncoding().GetString(data)
@@ -436,14 +436,25 @@ namespace WpfApp_BD
 
         private void cb_txxx_hexordec_Click(object sender, RoutedEventArgs e)
         {
-            if(textbox_txxx_dwnr.Text!="")
+            if (this.cb_txxx_hexordec.IsChecked == true)
+            {
+                cb_txxx_hexordec.Content = "十六进制";
+            }
+            else
+            {
+                cb_txxx_hexordec.Content = "ASCII";
+            }
+
+            if (textbox_txxx_dwnr.Text != "")
             {
                 if (this.cb_txxx_hexordec.IsChecked == true)
                 {
+
                     textbox_txxx_dwnr.Text = strToHexByte(textbox_txxx_dwnr.Text);
                 }
                 else
                 {
+
                     textbox_txxx_dwnr.Text = HexStringToASCII(textbox_txxx_dwnr.Text);
                 }
             }

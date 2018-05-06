@@ -614,11 +614,11 @@ namespace BD_Protocol
             {
                 if (zjxx.bsgl[i] != 0)
                 {
-                    BSGL |= Convert.ToByte((1 << i));
+                    BSGL |= Convert.ToByte((1 << i)&0xff);
                 }
                 else
                 {
-                    BSGL &= Convert.ToByte(~(1 << i));//error 原因未知
+                    BSGL &= Convert.ToByte((~(1 << i))&0xff);//error 原因未知
                 }
             }
 
