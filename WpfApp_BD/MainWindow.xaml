@@ -5,79 +5,147 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_BD"
         mc:Ignorable="d"
-        Title="开发者选项" Height="720" Width="1080" FontSize="16" FontFamily="Microsoft YaHei UI Light" ResizeMode="CanMinimize" BorderThickness="0" Foreground="Black" Background="White">
+        Title="北斗开发者选项" Height="847" Width="1080" FontSize="16" FontFamily="Microsoft YaHei UI Light" ResizeMode="CanMinimize" BorderThickness="0" Foreground="Black" Background="White" Closed="Window_Closed">
     <Grid>
-        <Button x:Name="btnicjc" Content="ICJC" HorizontalAlignment="Left" Margin="987,581,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
-        <Label x:Name="Label_Init" Content="状态:" Margin="128,10,0,0" VerticalAlignment="Top" MouseLeftButtonDown="Label_Init_MouseLeftButtonDown" MouseDoubleClick="Label_Init_MouseDoubleClick" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"/>
+        <Button x:Name="btnicjc" Content="自爆指令" HorizontalAlignment="Left" Margin="965,697,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="75"/>
+        <Label x:Name="Label_Init" Content="状态:" Margin="128,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"/>
         <Label x:Name="Label_Init_text" Content="未初始化" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Button x:Name="btnxjzj" Content="XJZJ" HorizontalAlignment="Left" Margin="987,610,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
-        <Label x:Name="Label_icxx_yhid" Content="用户ID:" Margin="68,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left"/>
-        <Label x:Name="Label_icxx_yhid_text" Content="null" Margin="128,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left"/>
-        <Label x:Name="label_icxx_tbid_text" Content="null" HorizontalAlignment="Left" Margin="347,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_yhtz" Content="用户特征:" HorizontalAlignment="Left" Margin="438,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_tbid" Content="通播ID:" HorizontalAlignment="Left" Margin="288,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_zh" Content="帧号:" HorizontalAlignment="Left" Margin="201,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_zh_text" Content="null" HorizontalAlignment="Left" Margin="247,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_fwpd" Content="服务频度:" HorizontalAlignment="Left" Margin="552,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_yhtz_text" Content="null" HorizontalAlignment="Left" Margin="511,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_fwpd_text" Content="null" HorizontalAlignment="Left" Margin="630,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_jmbz_text" Content="null" HorizontalAlignment="Left" Margin="749,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_jmbz" Content="加密标志:" HorizontalAlignment="Left" Margin="671,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_xsyhs_text" Content="null" HorizontalAlignment="Left" Margin="884,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_icxx_xsyhs" Content="下属用户数:" HorizontalAlignment="Left" Margin="790,57,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_iczt_text" Content="null" HorizontalAlignment="Left" Margin="152,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_iczt" Content="IC卡状态:" HorizontalAlignment="Left" Margin="70,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1" Content="1:" HorizontalAlignment="Left" Margin="143,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl" Content="波束功率:" HorizontalAlignment="Left" Margin="65,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_rzzt_text" Content="null" HorizontalAlignment="Left" Margin="766,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_rzzt" Content="入站状态:" HorizontalAlignment="Left" Margin="688,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_dczt_text" Content="null" HorizontalAlignment="Left" Margin="552,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_dczt" Content="电池状态:" HorizontalAlignment="Left" Margin="469,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_yjzt_text" Content="null" HorizontalAlignment="Left" Margin="329,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_yjzt" Content="硬件状态:" HorizontalAlignment="Left" Margin="251,123,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1_text" Content="null" HorizontalAlignment="Left" Margin="163,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl3" Content="3:" HorizontalAlignment="Left" Margin="337,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl2" Content="2:" HorizontalAlignment="Left" Margin="234,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl2_text" Content="null" HorizontalAlignment="Left" Margin="257,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl4_text" Content="null" HorizontalAlignment="Left" Margin="466,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl3_text" Content="null" HorizontalAlignment="Left" Margin="360,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl4" Content="4:" HorizontalAlignment="Left" Margin="443,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl6_text" Content="null" HorizontalAlignment="Left" Margin="691,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl6" Content="6:" HorizontalAlignment="Left" Margin="668,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl5_text" Content="null" HorizontalAlignment="Left" Margin="575,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl5" Content="5:" HorizontalAlignment="Left" Margin="552,162,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1_Copy1" Content="时间:" HorizontalAlignment="Left" Margin="800,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1_Copy2" Content="null" HorizontalAlignment="Left" Margin="757,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1_Copy3" Content="时区:" HorizontalAlignment="Left" Margin="720,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1_Copy" Content="null" HorizontalAlignment="Left" Margin="837,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        <Button x:Name="btnxjzj" Content="自毁指令" HorizontalAlignment="Left" Margin="965,668,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="75"/>
+        <Grid Margin="60,59,20,590" Panel.ZIndex="9">
+            <Label x:Name="label_icxx_yhid" Content="用户ID:" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left"/>
+            <Label x:Name="label_icxx_yhid_text" Content="null" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" Margin="61,0,0,0" Width="92"/>
+            <Label x:Name="label_icxx_tbid_text" Content="null" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="326,0,0,0"/>
+            <Label x:Name="label_icxx_yhtz" Content="用户特征:" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="367,0,0,0" Padding="5" HorizontalAlignment="Left"/>
+            <Label x:Name="label_icxx_tbid" Content="通播ID:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="265,0,0,0"/>
+            <Label x:Name="label_icxx_zh" Content="帧号:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="178,0,0,0"/>
+            <Label x:Name="label_icxx_zh_text" Content="null" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="224,0,0,0"/>
+            <Label x:Name="label_icxx_fwpd" Content="服务频度:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="486,0,0,0"/>
+            <Label x:Name="label_icxx_yhtz_text" Content="null" HorizontalAlignment="Left" Margin="445,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_icxx_fwpd_text" Content="null" HorizontalAlignment="Left" Margin="564,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_icxx_jmbz_text" Content="null" HorizontalAlignment="Left" Margin="802,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_icxx_jmbz" Content="加密标志:" HorizontalAlignment="Left" Margin="724,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_icxx_xsyhs_text" Content="null" HorizontalAlignment="Left" Margin="932,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_icxx_xsyhs" Content="下属用户数:" HorizontalAlignment="Left" Margin="838,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_icxx_txdj" Content="通信等级:" HorizontalAlignment="Left" Margin="605,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_icxx_txdj_text" Content="null" HorizontalAlignment="Left" Margin="683,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        </Grid>
+        <Grid Margin="61,132,0,0" Panel.ZIndex="9" HorizontalAlignment="Left" VerticalAlignment="Top" Height="41">
+            <Label x:Name="label_zjxx_iczt_text" Content="null" HorizontalAlignment="Left" Margin="82,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_iczt" Content="IC卡状态:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_rzzt_text" Content="null" HorizontalAlignment="Left" Margin="696,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_rzzt" Content="入站状态:" HorizontalAlignment="Left" Margin="618,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_dczt_text" Content="null" HorizontalAlignment="Left" Margin="482,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_dczt" Content="电池状态:" HorizontalAlignment="Left" Margin="399,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_yjzt_text" Content="null" HorizontalAlignment="Left" Margin="259,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_yjzt" Content="硬件状态:" HorizontalAlignment="Left" Margin="181,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        </Grid>
+        <Grid Margin="61,162,308,484" Panel.ZIndex="9">
+            <Label x:Name="label_zjxx_bsgl1" Content="1:" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl" Content="波束功率:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl1_text" Content="null" HorizontalAlignment="Left" Margin="98,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl3" Content="3:" HorizontalAlignment="Left" Margin="272,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl2" Content="2:" HorizontalAlignment="Left" Margin="169,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl2_text" Content="null" HorizontalAlignment="Left" Margin="192,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl4_text" Content="null" HorizontalAlignment="Left" Margin="401,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl3_text" Content="null" HorizontalAlignment="Left" Margin="295,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl4" Content="4:" HorizontalAlignment="Left" Margin="378,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl6_text" Content="null" HorizontalAlignment="Left" Margin="626,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl6" Content="6:" HorizontalAlignment="Left" Margin="603,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl5_text" Content="null" HorizontalAlignment="Left" Margin="510,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zjxx_bsgl5" Content="5:" HorizontalAlignment="Left" Margin="487,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        </Grid>
+        <Label x:Name="label_gntx_sj" Content="时间:" HorizontalAlignment="Left" Margin="811,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        <Label x:Name="label_gntx_sq_text" Content="null" HorizontalAlignment="Left" Margin="757,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        <Label x:Name="label_gntx_sq" Content="时区:" HorizontalAlignment="Left" Margin="720,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        <Label x:Name="label_gntx_sj_text" Content="null" HorizontalAlignment="Left" Margin="848,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
         <Border BorderThickness="1" Height="38" Margin="20,54,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="1"/>
         <Border BorderThickness="1" Height="80" Margin="20,117,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="1"/>
-        <Button x:Name="btnsend" Content="SEND" HorizontalAlignment="Left" Margin="987,639,0,0" VerticalAlignment="Top" Width="75" Panel.ZIndex="10"/>
-        <Label x:Name="Label_Init_Copy" Content="IC检测:" Margin="40,36,0,0" VerticalAlignment="Top" MouseLeftButtonDown="Label_Init_MouseLeftButtonDown" MouseDoubleClick="Label_Init_MouseDoubleClick" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="2" HorizontalAlignment="Left" Background="White"/>
-        <Label x:Name="Label_Init_Copy1" Content="系统自检:" Margin="40,101,0,0" VerticalAlignment="Top" MouseLeftButtonDown="Label_Init_MouseLeftButtonDown" MouseDoubleClick="Label_Init_MouseDoubleClick" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
-        <Label x:Name="label_zjxx_iczt_text_Copy" Content="null" HorizontalAlignment="Left" Margin="152,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_iczt_Copy" Content="IC卡状态:" HorizontalAlignment="Left" Margin="70,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1_Copy4" Content="1:" HorizontalAlignment="Left" Margin="143,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl_Copy" Content="波束功率:" HorizontalAlignment="Left" Margin="65,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_rzzt_text_Copy" Content="null" HorizontalAlignment="Left" Margin="766,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_rzzt_Copy" Content="入站状态:" HorizontalAlignment="Left" Margin="688,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_dczt_text_Copy" Content="null" HorizontalAlignment="Left" Margin="552,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_dczt_Copy" Content="电池状态:" HorizontalAlignment="Left" Margin="469,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_yjzt_text_Copy" Content="null" HorizontalAlignment="Left" Margin="329,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_yjzt_Copy" Content="硬件状态:" HorizontalAlignment="Left" Margin="251,243,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl1_text_Copy" Content="null" HorizontalAlignment="Left" Margin="163,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl3_Copy" Content="3:" HorizontalAlignment="Left" Margin="337,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl2_Copy" Content="2:" HorizontalAlignment="Left" Margin="234,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl2_text_Copy" Content="null" HorizontalAlignment="Left" Margin="257,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl4_text_Copy" Content="null" HorizontalAlignment="Left" Margin="466,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl3_text_Copy" Content="null" HorizontalAlignment="Left" Margin="360,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl4_Copy" Content="4:" HorizontalAlignment="Left" Margin="443,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl6_text_Copy" Content="null" HorizontalAlignment="Left" Margin="691,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl6_Copy" Content="6:" HorizontalAlignment="Left" Margin="668,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl5_text_Copy" Content="null" HorizontalAlignment="Left" Margin="575,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Label x:Name="label_zjxx_bsgl5_Copy" Content="5:" HorizontalAlignment="Left" Margin="552,282,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Border BorderThickness="1" Height="80" Margin="20,237,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="1"/>
-        <Label x:Name="Label_Init_Copy2" Content="定位信息(GNPX):" Margin="40,221,0,0" VerticalAlignment="Top" MouseLeftButtonDown="Label_Init_MouseLeftButtonDown" MouseDoubleClick="Label_Init_MouseDoubleClick" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
+        <Button x:Name="btnsend" Content="发射!" HorizontalAlignment="Left" Margin="966,639,0,0" VerticalAlignment="Top" Width="75" Panel.ZIndex="10"/>
+        <Label x:Name="Label_Init_Copy" Content="IC检测(ICXX)" Margin="40,36,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="2" HorizontalAlignment="Left" Background="White"/>
+        <Label x:Name="Label_Init_Copy1" Content="系统自检(ZJXX):" Margin="40,101,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
+        <Border BorderThickness="1" Height="119" Margin="20,219,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4"/>
+        <Label x:Name="Label_Init_Copy2" Content="定位信息(GNPX)" Margin="40,203,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
+        <Grid Margin="61,234,351,542" Panel.ZIndex="9">
+            <Label x:Name="label_gnpx_jdfw_text" Content="null" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jdfw" Content="经度范围:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jd_text" Content="null" HorizontalAlignment="Left" Margin="196,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jd" Content="经度:" HorizontalAlignment="Left" Margin="150,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jf_text" Content="null" HorizontalAlignment="Left" Margin="324,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jf" Content="经分:" HorizontalAlignment="Left" Margin="278,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jm_text" Content="null" HorizontalAlignment="Left" Margin="451,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jm" Content="经秒:" HorizontalAlignment="Left" Margin="405,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jxm_text" Content="null" HorizontalAlignment="Left" Margin="595,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jxm" Content="经小秒:" HorizontalAlignment="Left" Margin="533,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        </Grid>
+        <Grid Margin="61,269,351,502" Panel.ZIndex="9">
+            <Label x:Name="label_gnpx_wdfw" Content="纬度范围:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wd_text" Content="null" HorizontalAlignment="Left" Margin="196,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wd" Content="纬度:" HorizontalAlignment="Left" Margin="150,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wf_text" Content="null" HorizontalAlignment="Left" Margin="324,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wf" Content="纬分:" HorizontalAlignment="Left" Margin="278,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wm_text" Content="null" HorizontalAlignment="Left" Margin="451,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wm" Content="纬秒:" HorizontalAlignment="Left" Margin="405,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wxm_text" Content="null" HorizontalAlignment="Left" Margin="595,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wxm" Content="纬小秒:" HorizontalAlignment="Left" Margin="533,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wdfw_text" Content="null" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        </Grid>
+        <Label x:Name="label_gnpx_zhzb" Content="转换坐标" HorizontalAlignment="Left" Margin="848,234,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+        <TextBox x:Name="textbox_gnpx_zhzb" HorizontalAlignment="Left" Height="23" Margin="744,269,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="287" Panel.ZIndex="10" TextChanged="TextBox_TextChanged"/>
+        <Grid Margin="61,304,52,470" Panel.ZIndex="9">
+            <Label x:Name="label_gnpx_gd" Content="高度:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_sd_text" Content="null" HorizontalAlignment="Left" Margin="196,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_sd" Content="速度:" HorizontalAlignment="Left" Margin="150,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_fx_text" Content="null" HorizontalAlignment="Left" Margin="324,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_fx" Content="方向:" HorizontalAlignment="Left" Margin="278,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wxs_text" Content="null" HorizontalAlignment="Left" Margin="467,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_wxs" Content="卫星数:" HorizontalAlignment="Left" Margin="405,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_zt_text" Content="null" HorizontalAlignment="Left" Margin="578,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_zt" Content="状态:" HorizontalAlignment="Left" Margin="532,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_gd_text" Content="null" HorizontalAlignment="Left" Margin="46,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jdxs_text" Content="null" HorizontalAlignment="Left" Margin="723,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_jdxs" Content="精度系数:" HorizontalAlignment="Left" Margin="645,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnpx_gjwc_text" Content="null" HorizontalAlignment="Left" Margin="882,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" RenderTransformOrigin="-1.444,0.7"/>
+            <Label x:Name="label_gnpx_gjwc" Content="估计误差:" HorizontalAlignment="Left" Margin="804,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+
+        </Grid>
+        <Grid Margin="40,372,711,279" Panel.ZIndex="9">
+            <Label x:Name="label_gnvx_bwxgs_text" Content="null" HorizontalAlignment="Left" Margin="79,4,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnvx_bwxgs" Content="BDS个数:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="1,4,0,0"/>
+            <ListBox x:Name="listbox_gnvx_bwxxx" HorizontalAlignment="Left" Height="118" Margin="1,34,0,0" VerticalAlignment="Top" Width="294" Panel.ZIndex="10">
+                <ListBoxItem Content="(卫星编号)(卫星仰角)(方位角)(信噪比)" IsSelected="True"/>
+            </ListBox>
+        </Grid>
+        <Border BorderThickness="1" Height="182" Margin="20,357,403,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="1"/>
+        <Label x:Name="Label_Init_Copy3" Content="可视卫星(GNVX)" Margin="40,341,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White" IsEnabled="False"/>
+        <Grid Margin="363,372,403,279" Panel.ZIndex="9">
+            <Label x:Name="label_gnvx_gwxgs_text" Content="null" HorizontalAlignment="Left" Margin="79,4,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_gnvx_gwxgs" Content="GPS个数:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" Margin="1,4,0,0"/>
+            <ListBox x:Name="listbox_gnvx_gwxxx" HorizontalAlignment="Left" Height="118" Margin="0,34,0,0" VerticalAlignment="Top" Width="295" Panel.ZIndex="10">
+                <ListBoxItem Content="(卫星编号)(卫星仰角)(方位角)(信噪比)"/>
+            </ListBox>
+        </Grid>
+        <Border BorderThickness="1" Height="182" Margin="688,357,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="1"/>
+        <Label x:Name="Label_Init_Copy4" Content="(反馈信息)FKXX:" Margin="708,341,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
+        <Label x:Name="Label_djs" Content="倒计时:" Margin="426,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"/>
+        <Label x:Name="label_djs_text" Content="0s" Margin="488,4,0,0" VerticalAlignment="Top" FontSize="22" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" FontWeight="Bold" Background="White" Foreground="Red"/>
+        <ListBox x:Name="listbox_fkxx" HorizontalAlignment="Left" Height="145" Margin="708,376,0,0" VerticalAlignment="Top" Width="323" Panel.ZIndex="10"/>
+        <Border BorderThickness="1" Height="182" Margin="20,561,403,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="-1"/>
+        <Label x:Name="label_txxx" Content="通讯信息(TXXX)" Margin="40,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
+        <Label x:Name="label_txxx_xxlb" Content="信息类别:" HorizontalAlignment="Left" Margin="63,580,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
+        <Label x:Name="label_txxx_fxgd" Content="发信方地:" HorizontalAlignment="Left" Margin="63,610,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
+        <Label x:Name="label_txxx_xxlb_text" Content="null" HorizontalAlignment="Left" Margin="141,580,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="112"/>
+        <Label x:Name="label_txxx_fxfd_text" Content="null" HorizontalAlignment="Left" Margin="141,610,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="112"/>
+        <Label x:Name="label_txxx_fxsj" Content="发信时间:" HorizontalAlignment="Left" Margin="63,642,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
+        <Label Content="null" HorizontalAlignment="Left" Margin="-96,0,0,328" VerticalAlignment="Bottom"/>
+        <Label x:Name="label_txxx_fxsj_text" Content="null" HorizontalAlignment="Left" Margin="141,642,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="112"/>
+        <Label x:Name="label_txxx_dwcd" Content="电文长度:" HorizontalAlignment="Left" Margin="63,672,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
+        <Label x:Name="label_txxx_dwcd_text" Content="null" HorizontalAlignment="Left" Margin="141,672,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="137"/>
+        <Label x:Name="label_txxx_crc" Content="CRC:" HorizontalAlignment="Left" Margin="63,702,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
+        <Label x:Name="label_txxx_crc_text" Content="null" HorizontalAlignment="Left" Margin="108,702,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
+        <CheckBox x:Name="cb_txxx_hexordec" Content="十六进制" HorizontalAlignment="Left" Margin="169,708,0,0" VerticalAlignment="Top" Panel.ZIndex="10" IsChecked="True" Click="cb_txxx_hexordec_Click"/>
+        <TextBox x:Name="textbox_txxx_dwnr" HorizontalAlignment="Left" Height="132" Margin="283,584,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="356" Panel.ZIndex="10"/>
+        <Label x:Name="label_txxx_lasttime" Content="最后通讯:" Margin="350,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White" Width="78"/>
+        <Label x:Name="label_txxx_lasttime_text" Content="" Margin="426,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
 
     </Grid>
 </Window>
