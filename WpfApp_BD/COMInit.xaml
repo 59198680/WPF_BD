@@ -1,0 +1,15 @@
+﻿<Window x:Class="WpfApp_BD.COMInit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp_BD"
+        mc:Ignorable="d"
+        Title="北斗用户机开发测试--请打开端口" Height="480" Width="320" ResizeMode="CanMinimize" Background="#FF444343" Loaded="Window_Loaded" Closed="Window_Closed">
+    <Grid>
+        <ComboBox x:Name="RateListCbobox" HorizontalAlignment="Left" Margin="101,220,0,0" VerticalAlignment="Top" IsEditable="True" FontSize="16" Width="120"/>
+        <ComboBox x:Name="AvailableComCbobox" HorizontalAlignment="Left" Margin="101,152,0,0" VerticalAlignment="Top" Width="120" FontSize="16"/>
+        <Button x:Name="cb_open" Content="Button" HorizontalAlignment="Left" Margin="116,300,0,0" VerticalAlignment="Top" Width="87" Height="22" FontSize="16" Click="cb_open_Click"/>
+
+    </Grid>
+</Window>

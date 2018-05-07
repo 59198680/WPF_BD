@@ -46,21 +46,21 @@ namespace WpfApp_BD
        [STAThread]
         static void Main(string[] args)
         {
-            mycom = new mySerialPort();
-            bdxx = new BD(mycom);
-            MainWindow windows = new MainWindow();
-            Thread t1 = new Thread(new ThreadStart(ThreadMethod1));
-            Thread t2 = new Thread(new ParameterizedThreadStart(ThreadMethod2));//ParameterizedThreadStart
-            t1.Start();
-            t2.Start(windows);
-
             //mycom = new mySerialPort();
-            app = new WpfApp_BD.App();
-            app.InitializeComponent();
+            //bdxx = new BD(mycom);
+            //MainWindow windows = new MainWindow();
+            //Thread t1 = new Thread(new ThreadStart(ThreadMethod1));
+            //Thread t2 = new Thread(new ParameterizedThreadStart(ThreadMethod2));//ParameterizedThreadStart
+            //t1.Start();
+            //t2.Start(windows);
+
+            ////mycom = new mySerialPort();
+            //app = new WpfApp_BD.App();
+            //app.InitializeComponent();
             
-            app.MainWindow = windows;
-            //app.ShutdownMode = ShutdownMode.OnMainWindowClose;
-            app.Run();
+            //app.MainWindow = windows;
+            ////app.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            //app.Run();
            
         }
     }

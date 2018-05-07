@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WpfApp_BD;
@@ -50,6 +51,8 @@ namespace BD_Protocol
         public UCHR status = 0x80;
         public UCHR error_flag = 0;
         public UCHR BSGL = 0;//波束功率0-5位
+        System.Timers.Timer timer_extract;
+        System.Timers.Timer timer_check;
         public struct RE_BUFFER
         {
             public UINT wp;
@@ -58,7 +61,7 @@ namespace BD_Protocol
         };
 
         public RE_BUFFER rebuff;
-        mySerialPort mycom;
+        MynewCOM mycom;
 
         public struct BD_GNTX
         {
@@ -243,7 +246,7 @@ namespace BD_Protocol
         public BD_GNTX gntx;
         public BD_GNPX gnpx;
         public BD_GNVX gnvx;
-        public BD(mySerialPort com)
+        public BD()
         {
             //bbxx = new BD_BBXX();
             dwxx = new BD_DWXX();
@@ -262,31 +265,59 @@ namespace BD_Protocol
             icxx.yhdz = new UCHR[3];
             txxx.fxfdz = new UCHR[3];
             zjxx.bsgl = new UCHR[6];
-            mycom = com;
-            Init();
+            
         }
-        void Init()
+        public void Init(MynewCOM com)
         {
+            mycom = com;
             //结构体初始化0 TODO
             rebuff.rp = 0;
             rebuff.wp = 0;
-            // myprint = &printf;
+
+            timer_extract = new System.Timers.Timer(100);//实例化Timer类，设置间隔时间为100毫秒；     
+            timer_extract.Elapsed += new System.Timers.ElapsedEventHandler(Thread_Extract);//到达时间的时候执行事件；   
+            timer_extract.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
+            timer_extract.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
+
+            timer_check = new System.Timers.Timer(1000);//实例化Timer类，设置间隔时间为1000毫秒；     
+            timer_check.Elapsed += new System.Timers.ElapsedEventHandler(Thread_Check);//到达时间的时候执行事件；   
+            timer_check.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
+            timer_check.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
+
+
         }
 
         UINT check_status_count = 0;
+
+        void Thread_Extract(object source, System.Timers.ElapsedEventArgs e)
+        {
+                Receive_Protocol();
+        }
+        void Thread_Check(object source, System.Timers.ElapsedEventArgs e)
+        {
+            Check_status();
+            if (SEND_BLOCKTIME != 0)
+            {
+                --SEND_BLOCKTIME;
+                print_flag |= PRINT_BLOCK;
+            }
+        }
+
         public void Check_status()
         {
             //UINT check_status_count = 0;
-            if (check_status_count >= 6)
+            if (check_status_count >= 10)
             {
+                check_status_count = 0;
                 MessageBox.Show("check_status_count=" + check_status_count, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 status &= 0;
                 status |= STATUS_BIT_ANSWER;
-                check_status_count = 0;
+                
             }
 
             if ((status & STATUS_BIT_ANSWER) != 0)//有回复
             {
+                check_status_count=0;
                 switch (status & ~STATUS_BIT_ANSWER)//检查确认位
                 {
                     case (STEP_NONE | STATUS_BIT_NO_CONFIRM):
@@ -395,7 +426,7 @@ namespace BD_Protocol
             sendbuffer[9] = 0;
             sendbuffer[10] = 0;
             sendbuffer[11] = this.Xor_checksum(ref sendbuffer, 11);
-            mycom.SendData(sendbuffer);
+            mycom.Send(sendbuffer);
         }
 
         void GNPS_send()
@@ -409,7 +440,7 @@ namespace BD_Protocol
             sendbuffer[10] = Convert.ToByte((UINT)BD_PRINT_GNPX_SEQ >> 8);
             sendbuffer[11] = Convert.ToByte((UINT)BD_PRINT_GNPX_SEQ & 0xff);
             sendbuffer[12] = this.Xor_checksum(ref sendbuffer, 12);
-            mycom.SendData(sendbuffer);
+            mycom.Send(sendbuffer);
         }
 
         void GNVS_send()
@@ -423,7 +454,7 @@ namespace BD_Protocol
             sendbuffer[10] = Convert.ToByte((UINT)BD_PRINT_GNVX_SEQ >> 8);
             sendbuffer[11] = Convert.ToByte(((UINT)BD_PRINT_GNVX_SEQ & 0xff));
             sendbuffer[12] = this.Xor_checksum(ref sendbuffer, 12);
-            mycom.SendData(sendbuffer);
+            mycom.Send(sendbuffer);
         }
 
         void GNTS_send()
@@ -438,7 +469,7 @@ namespace BD_Protocol
             sendbuffer[11] = Convert.ToByte((UINT)BD_PRINT_GNTX_SEQ >> 8);
             sendbuffer[12] = Convert.ToByte((UINT)BD_PRINT_GNTX_SEQ & 0xff);
             sendbuffer[13] = this.Xor_checksum(ref sendbuffer, 13);
-            mycom.SendData(sendbuffer);
+            mycom.Send(sendbuffer);
         }
 
         void XTZJ_send()
@@ -458,7 +489,7 @@ namespace BD_Protocol
             sendbuffer[10] = Convert.ToByte((UINT)BD_PRINT_TIME_SEQ >> 8);
             sendbuffer[11] = Convert.ToByte((UINT)BD_PRINT_TIME_SEQ & 0xff);
             sendbuffer[12] = Xor_checksum(ref sendbuffer, 12);
-            mycom.SendData(sendbuffer);
+            mycom.Send(sendbuffer);
         }
 
         void SJSC_send()
@@ -472,7 +503,7 @@ namespace BD_Protocol
             sendbuffer[10] = Convert.ToByte((UINT)BD_PRINT_TIME_SEQ >> 8);
             sendbuffer[11] = Convert.ToByte((UINT)BD_PRINT_TIME_SEQ & 0xff);
             sendbuffer[12] = Xor_checksum(ref sendbuffer, 12);
-            mycom.SendData(sendbuffer);
+            mycom.Send(sendbuffer);
         }
 
 
@@ -545,7 +576,7 @@ namespace BD_Protocol
             for (; i < len; ++i)
                 sendbuffer[17 + i] = buffer[i];
             sendbuffer[lenth - 1] = Xor_checksum(ref sendbuffer, lenth - 1);
-            mycom.SendData(sendbuffer);
+            mycom.Send(sendbuffer);
         }
 
         void DWSQ_send()

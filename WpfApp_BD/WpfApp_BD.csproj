@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>WpfApp_BD.myStartMain</StartupObject>
+    <StartupObject>WpfApp_BD.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -74,7 +74,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="COMInit.xaml.cs">
+      <DependentUpon>COMInit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MynewCOM.cs" />
     <Compile Include="Receive_Protocol.cs" />
+    <Page Include="COMInit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

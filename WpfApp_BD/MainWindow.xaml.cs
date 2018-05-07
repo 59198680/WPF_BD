@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using BD_Protocol;
 namespace WpfApp_BD
 {
@@ -20,6 +22,7 @@ namespace WpfApp_BD
     {
         public BD bdxx;
         public MainWindow win;
+
         public Box(MainWindow m, BD bd)
         {
             win = m;
@@ -33,323 +36,401 @@ namespace WpfApp_BD
     /// </summary>
     public partial class MainWindow : Window
     {
-        //public static Semaphore sema = new Semaphore(0, 1);
-        public BD bdxx;
-
-        public void fun()
+        BD bdxx;
+        DispatcherTimer autoTick = new DispatcherTimer();//定时发送
+        public MainWindow(BD b)
         {
-            int i = 0;
-            while (true)
-            {
-                // sema.WaitOne();
-                i++;
-                new Thread(() =>
-                {
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
+            bdxx = b;
+            InitializeComponent();
 
-                        label_gntx_sj_text.Content = Convert.ToString(i);
-                    }));
-                }).Start();
+        }
+        System.Timers.Timer timer_extract;
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            autoTick.Tick += new EventHandler(Seamphore_thread);//定时中断
+            autoTick.Interval = TimeSpan.FromMilliseconds(200);//设置自动间隔
+                                                               //autoTick.Start();//开启自动
+            timer_extract = new System.Timers.Timer(500);//实例化Timer类，设置间隔时间为100毫秒；     
+            timer_extract.Elapsed += new System.Timers.ElapsedEventHandler(Seamphore_thread);//到达时间的时候执行事件；   
+            timer_extract.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
+            timer_extract.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
+        }
+
+        public static class DispatcherHelper
+        {
+            [SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+            public static void DoEvents()
+            {
+                DispatcherFrame frame = new DispatcherFrame();
+                Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(ExitFrames), frame);
+                try { Dispatcher.PushFrame(frame); }
+                catch (InvalidOperationException) { }
+            }
+            private static object ExitFrames(object frame)
+            {
+                ((DispatcherFrame)frame).Continue = false;
+                return null;
             }
         }
-        public MainWindow()
+        void UIAction(Action action)//在主线程外激活线程方法
         {
-            InitializeComponent();
-            //Thread asd = new Thread(new ThreadStart(fun));
-            //asd.Start();
-            Thread print = new Thread(new ParameterizedThreadStart(Seamphore_thread));
-            // InitializeComponent();
-            bdxx = myStartMain.bdxx;
-            print.Start(new Box(this, bdxx));
-            //this.Dispatcher.BeginInvoke(new Action(delegate
-            //{
-            //    while (true)
-            //    {
-            //        // Console.WriteLine("不带参数的线程函数");
-            //        //if (obj != null)
-            //        {
-            //            //MainWindow temp = (MainWindow)obj;
-            //            //if (bdxx != null && temp != null)
-            //            Seamphore_thread(new Box(this, bdxx));
-            //        }
-            //        Thread.Sleep(1000);
-            //    }
-            //    //这里写代码      
-            //}));
-            //this.Dispatcher.BeginInvoke(new Action(delegate {
-            //    while (true)
-            //    {
-            //        // Console.WriteLine("不带参数的线程函数");
-            //        //if (obj != null)
-            //        {
-            //            //MainWindow temp = (MainWindow)obj;
-            //            //if (bdxx != null && temp != null)
-            //            this.Label_djs_text.Content = bdxx.SEND_BLOCKTIME.ToString();
-            //        }
-            //        Thread.Sleep(1000);
-            //    }
-            //    //这里写代码      
-            //}));
+            System.Threading.SynchronizationContext.SetSynchronizationContext(new System.Windows.Threading.DispatcherSynchronizationContext(App.Current.Dispatcher));
+            System.Threading.SynchronizationContext.Current.Post(_ => action(), null);
         }
-        public static void Seamphore_thread(object obj1)
+        static int tem = 0;
+        public void Seamphore_thread(object sender, EventArgs e)
         {
-            BD bdxx = ((Box)obj1).bdxx;
-            MainWindow win = ((Box)obj1).win;
-            while (true)
+            // BD bdxx = ((Box)obj1).bdxx;
+            // MainWindow win = ((Box)obj1).win;
+            //tem++;
+            //if (tem % 2 == 0)
+            //    MessageBox.Show((tem / 2).ToString());
+            if ((bdxx.print_flag & BD.PRINT_STATUS) != 0)
             {
-                //sema.WaitOne();
-                if ((bdxx.print_flag & BD.PRINT_STATUS) != 0)
+                string str = "";
+                if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_NONE)
                 {
-                    string str = "";
-                    if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_NONE)
-                    {
-                        str = "未初始化";
-                    }
-                    else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_ICJC)
-                    {
-                        str = "IC检测";
-                    }
-                    else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_READY)
-                    {
-                        str = "就绪";
-                    }
-                    else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_SJSC)
-                    {
-                        str = "时间输出";
-                    }
-                    else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_XJZJ)
-                    {
-                        str = "系统自检";
-                    }
-                    else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_GNPS)
-                    {
-                        str = "定位信息";
-                    }
-                    else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_GNTS)
-                    {
-                        str = "时间信息";
-                    }
-                    else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_GNVS)
-                    {
-                        str = "可视卫星";
-                    }
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.BeginInvoke(new Action(() =>
-                        {
+                    str = "未初始化";
+                }
+                else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_ICJC)
+                {
+                    str = "IC检测";
+                }
+                else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_READY)
+                {
+                    str = "就绪";
+                }
+                else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_SJSC)
+                {
+                    str = "时间输出";
+                }
+                else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_XJZJ)
+                {
+                    str = "系统自检";
+                }
+                else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_GNPS)
+                {
+                    str = "定位信息";
+                }
+                else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_GNTS)
+                {
+                    str = "时间信息";
+                }
+                else if ((bdxx.status & BD.STATUS_BIT_STEP) == BD.STEP_GNVS)
+                {
+                    str = "可视卫星";
+                }
+                UIAction(() =>
+                {
+                    Label_Init_text.Content = str;
+                });
+                //new Thread(() =>
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
 
-                            win.Label_Init_text.Content = str;
-                        }));
-                    }).Start();
-                    bdxx.print_flag &= ~BD.PRINT_STATUS;
-                }
-                if ((bdxx.print_flag & BD.PRINT_DWXX) != 0)
-                {
+                //        Label_Init_text.Content = str;
+                //    }));
+                //}).Start();
+                bdxx.print_flag &= ~BD.PRINT_STATUS;
+            }
+            if ((bdxx.print_flag & BD.PRINT_DWXX) != 0)
+            {
 
-                }
-                if ((bdxx.print_flag & BD.PRINT_BLOCK) != 0)
-                {
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.Invoke(new Action(() =>
-                        {
+            }
+            if ((bdxx.print_flag & BD.PRINT_BLOCK) != 0)
+            {
+                //new Thread(() =>
+                //{
+                //    Dispatcher.Invoke(new Action(() =>
+                //    {
 
-                            win.label_djs_text.Content = Convert.ToString(bdxx.SEND_BLOCKTIME) + "s";
-                        }));
-                    }).Start();
-                    bdxx.print_flag &= ~BD.PRINT_BLOCK;
-                }
-                if ((bdxx.print_flag & BD.PRINT_TXXX) != 0)
+                //        label_djs_text.Content = Convert.ToString(bdxx.SEND_BLOCKTIME) + "s";
+                //    }));
+                //}).Start();
+                UIAction(() =>
                 {
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.BeginInvoke(new Action(() =>
-                        {
+                    label_djs_text.Content = Convert.ToString(bdxx.SEND_BLOCKTIME) + "s";
+                });
+                bdxx.print_flag &= ~BD.PRINT_BLOCK;
 
-                            win.label_txxx_xxlb_text.Content = Convert.ToString(bdxx.txxx.xxlb, 2);
-                            win.label_txxx_fxfd_text.Content = Convert.ToString(bdxx.txxx.fxfdz[0] * 256 * 256 + bdxx.txxx.fxfdz[1] * 256 + bdxx.txxx.fxfdz[2]);
-                            win.label_txxx_fxsj_text.Content = Convert.ToString(bdxx.txxx.fxsj_h) + "时" + Convert.ToString(bdxx.txxx.fxsj_m) + "分";
-                            win.label_txxx_dwcd_text.Content = Convert.ToString(bdxx.txxx.dwcd / 8.0) + "bytes(" + Convert.ToString(bdxx.txxx.dwcd) + "bits)";
-                            win.label_txxx_crc_text.Content = Convert.ToString(bdxx.txxx.crc);
-                            win.label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
-                            if (win.cb_txxx_hexordec.IsChecked == true)
-                            {
-                                StringBuilder sb = new StringBuilder();
-                                for (int i = 0; i < bdxx.txxx.dwnr.Length; i++)
-                                {
-                                    sb.AppendFormat("{0:x2}" + " ", bdxx.txxx.dwnr[i]);
-                                }
-                                win.textbox_txxx_dwnr.Text = sb.ToString().ToUpper();
-                            }
-                            else
-                            {
-                                win.textbox_txxx_dwnr.Text = new ASCIIEncoding().GetString(bdxx.txxx.dwnr);
-                            }
-                            // win.textbox_txxx_dwnr.Text = Convert.ToString();
+            }
+            if ((bdxx.print_flag & BD.PRINT_TXXX) != 0)
+            {
+                //new Thread(() =>
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
 
-                        }));
-                    }).Start();
-                    bdxx.print_flag &= ~BD.PRINT_TXXX;
-                }
-                if ((bdxx.print_flag & BD.PRINT_ICXX) != 0)
-                {
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            win.label_icxx_yhid_text.Content = Convert.ToString(bdxx.icxx.yhdz[0] * 256 * 256 + bdxx.icxx.yhdz[1] * 256 + bdxx.icxx.yhdz[2]);
-                            win.label_icxx_zh_text.Content = Convert.ToString(bdxx.icxx.zh);
-                            win.label_icxx_tbid_text.Content = Convert.ToString(bdxx.icxx.tbid);
-                            win.label_icxx_yhtz_text.Content = Convert.ToString(bdxx.icxx.yhtz);
-                            win.label_icxx_fwpd_text.Content = Convert.ToString(bdxx.icxx.fwpd);
-                            win.label_icxx_txdj_text.Content = Convert.ToString(bdxx.icxx.txdj);
-                            win.label_icxx_jmbz_text.Content = Convert.ToString(bdxx.icxx.jmbz);
-                            win.label_icxx_xsyhs_text.Content = Convert.ToString(bdxx.icxx.xsyhzs);
-                        }));
-                    }).Start();
-                    bdxx.print_flag &= ~BD.PRINT_ICXX;
-                }
-                if ((bdxx.print_flag & BD.PRINT_ZJXX) != 0)
-                {
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            win.label_zjxx_iczt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.iczt, 16);
-                            win.label_zjxx_yjzt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.yjzt, 16);
-                            win.label_zjxx_dczt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.dcdl, 16);
-                            win.label_zjxx_rzzt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.rzzt, 16);
-                            win.label_zjxx_bsgl1_text.Content = Convert.ToString(bdxx.zjxx.bsgl[0]);
-                            win.label_zjxx_bsgl2_text.Content = Convert.ToString(bdxx.zjxx.bsgl[1]);
-                            win.label_zjxx_bsgl3_text.Content = Convert.ToString(bdxx.zjxx.bsgl[2]);
-                            win.label_zjxx_bsgl4_text.Content = Convert.ToString(bdxx.zjxx.bsgl[3]);
-                            win.label_zjxx_bsgl5_text.Content = Convert.ToString(bdxx.zjxx.bsgl[4]);
-                            win.label_zjxx_bsgl6_text.Content = Convert.ToString(bdxx.zjxx.bsgl[5]);
-                        }));
-                    }).Start();
-                    bdxx.print_flag &= ~BD.PRINT_ZJXX;
-                }
-                if ((bdxx.print_flag & BD.PRINT_SJXX) != 0)
-                {
+                //        label_txxx_xxlb_text.Content = Convert.ToString(bdxx.txxx.xxlb, 2);
+                //        label_txxx_fxfd_text.Content = Convert.ToString(bdxx.txxx.fxfdz[0] * 256 * 256 + bdxx.txxx.fxfdz[1] * 256 + bdxx.txxx.fxfdz[2]);
+                //        label_txxx_fxsj_text.Content = Convert.ToString(bdxx.txxx.fxsj_h) + "时" + Convert.ToString(bdxx.txxx.fxsj_m) + "分";
+                //        label_txxx_dwcd_text.Content = Convert.ToString(bdxx.txxx.dwcd / 8.0) + "bytes(" + Convert.ToString(bdxx.txxx.dwcd) + "bits)";
+                //        label_txxx_crc_text.Content = Convert.ToString(bdxx.txxx.crc);
+                //        label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                //        if (cb_txxx_hexordec.IsChecked == true)
+                //        {
+                //            StringBuilder sb = new StringBuilder();
+                //            for (int i = 0; i < bdxx.txxx.dwnr.Length; i++)
+                //            {
+                //                sb.AppendFormat("{0:x2}" + " ", bdxx.txxx.dwnr[i]);
+                //            }
+                //            textbox_txxx_dwnr.Text = sb.ToString().ToUpper();
+                //        }
+                //        else
+                //        {
+                //            textbox_txxx_dwnr.Text = new ASCIIEncoding().GetString(bdxx.txxx.dwnr);
+                //        }
+                //            // textbox_txxx_dwnr.Text = Convert.ToString();
 
-                }
-                if ((bdxx.print_flag & BD.PRINT_FKXX) != 0)
+                //        }));
+                //}).Start();
+                UIAction(() =>
                 {
-                    string str = "";
-                    if (bdxx.fkxx.flbz == 0)
+                    label_txxx_xxlb_text.Content = Convert.ToString(bdxx.txxx.xxlb, 2);
+                    label_txxx_fxfd_text.Content = Convert.ToString(bdxx.txxx.fxfdz[0] * 256 * 256 + bdxx.txxx.fxfdz[1] * 256 + bdxx.txxx.fxfdz[2]);
+                    label_txxx_fxsj_text.Content = Convert.ToString(bdxx.txxx.fxsj_h) + "时" + Convert.ToString(bdxx.txxx.fxsj_m) + "分";
+                    label_txxx_dwcd_text.Content = Convert.ToString(bdxx.txxx.dwcd / 8.0) + "bytes(" + Convert.ToString(bdxx.txxx.dwcd) + "bits)";
+                    label_txxx_crc_text.Content = Convert.ToString(bdxx.txxx.crc);
+                    label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                    if (cb_txxx_hexordec.IsChecked == true)
                     {
-                        str = "成功,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
-                        // bdxx.SEND_BLOCKTIME = 60;
-                    }
-                    else if (bdxx.fkxx.flbz == 1)
-                        str = "失败,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
-                    else if (bdxx.fkxx.flbz == 2)
-                        str = "信号未锁定";
-                    else if (bdxx.fkxx.flbz == 3)
-                        str = "电量不足";
-                    else if (bdxx.fkxx.flbz == 4)
-                        str = "发射频度未到,时间:" + Convert.ToString(bdxx.fkxx.fjxx[3]) + "秒";
-                    else if (bdxx.fkxx.flbz == 5)
-                        str = "加解密错误";
-                    else if (bdxx.fkxx.flbz == 6)
-                        str = "CRC错误,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
-                    else if (bdxx.fkxx.flbz == 7)
-                        str = "用户级被抑制";
-                    else if (bdxx.fkxx.flbz == 8)
-                        str = "抑制解除\n";
-                    str += "  " + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.BeginInvoke(new Action(() =>
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 0; i < bdxx.txxx.dwnr.Length; i++)
                         {
-                            
-                            win.listbox_fkxx.Items.Add(new ListBoxItem().Content = str);
-                        }));
-                    }).Start();
-                    bdxx.print_flag &= ~BD.PRINT_FKXX;
-                }
-                if ((bdxx.print_flag & BD.PRINT_GNTX) != 0)
-                {
-                    sbyte sq = bdxx.gntx.sqlx;
-                    string str = "";
-                    if (sq >= 0)
-                    {
-                        str = "东";
+                            sb.AppendFormat("{0:x2}" + " ", bdxx.txxx.dwnr[i]);
+                        }
+                        textbox_txxx_dwnr.Text = sb.ToString().ToUpper();
                     }
                     else
                     {
-                        str = "西";
-                        sq *= -1;
+                        textbox_txxx_dwnr.Text = new ASCIIEncoding().GetString(bdxx.txxx.dwnr);
                     }
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.Invoke(new Action(() =>
-                        {
-                            
+                });
+                bdxx.print_flag &= ~BD.PRINT_TXXX;
+            }
+            if ((bdxx.print_flag & BD.PRINT_ICXX) != 0)
+            {
+                //new Thread(() =>
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
+                //        label_icxx_yhid_text.Content = Convert.ToString(bdxx.icxx.yhdz[0] * 256 * 256 + bdxx.icxx.yhdz[1] * 256 + bdxx.icxx.yhdz[2]);
+                //        label_icxx_zh_text.Content = Convert.ToString(bdxx.icxx.zh);
+                //        label_icxx_tbid_text.Content = Convert.ToString(bdxx.icxx.tbid);
+                //        label_icxx_yhtz_text.Content = Convert.ToString(bdxx.icxx.yhtz);
+                //        label_icxx_fwpd_text.Content = Convert.ToString(bdxx.icxx.fwpd);
+                //        label_icxx_txdj_text.Content = Convert.ToString(bdxx.icxx.txdj);
+                //        label_icxx_jmbz_text.Content = Convert.ToString(bdxx.icxx.jmbz);
+                //        label_icxx_xsyhs_text.Content = Convert.ToString(bdxx.icxx.xsyhzs);
+                //    }));
+                //}).Start();
+                UIAction(() =>
+                {
+                    label_icxx_yhid_text.Content = Convert.ToString(bdxx.icxx.yhdz[0] * 256 * 256 + bdxx.icxx.yhdz[1] * 256 + bdxx.icxx.yhdz[2]);
+                    label_icxx_zh_text.Content = Convert.ToString(bdxx.icxx.zh);
+                    label_icxx_tbid_text.Content = Convert.ToString(bdxx.icxx.tbid);
+                    label_icxx_yhtz_text.Content = Convert.ToString(bdxx.icxx.yhtz);
+                    label_icxx_fwpd_text.Content = Convert.ToString(bdxx.icxx.fwpd);
+                    label_icxx_txdj_text.Content = Convert.ToString(bdxx.icxx.txdj);
+                    label_icxx_jmbz_text.Content = Convert.ToString(bdxx.icxx.jmbz);
+                    label_icxx_xsyhs_text.Content = Convert.ToString(bdxx.icxx.xsyhzs);
+                });
+                bdxx.print_flag &= ~BD.PRINT_ICXX;
+            }
+            if ((bdxx.print_flag & BD.PRINT_ZJXX) != 0)
+            {
+                //new Thread(() =>
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
+                //        label_zjxx_iczt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.iczt, 16);
+                //        label_zjxx_yjzt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.yjzt, 16);
+                //        label_zjxx_dczt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.dcdl, 16);
+                //        label_zjxx_rzzt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.rzzt, 16);
+                //        label_zjxx_bsgl1_text.Content = Convert.ToString(bdxx.zjxx.bsgl[0]);
+                //        label_zjxx_bsgl2_text.Content = Convert.ToString(bdxx.zjxx.bsgl[1]);
+                //        label_zjxx_bsgl3_text.Content = Convert.ToString(bdxx.zjxx.bsgl[2]);
+                //        label_zjxx_bsgl4_text.Content = Convert.ToString(bdxx.zjxx.bsgl[3]);
+                //        label_zjxx_bsgl5_text.Content = Convert.ToString(bdxx.zjxx.bsgl[4]);
+                //        label_zjxx_bsgl6_text.Content = Convert.ToString(bdxx.zjxx.bsgl[5]);
+                //    }));
+                //}).Start();
+                UIAction(() =>
+                {
+                    label_zjxx_iczt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.iczt, 16);
+                    label_zjxx_yjzt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.yjzt, 16);
+                    label_zjxx_dczt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.dcdl, 16);
+                    label_zjxx_rzzt_text.Content = "0x" + Convert.ToString(bdxx.zjxx.rzzt, 16);
+                    label_zjxx_bsgl1_text.Content = Convert.ToString(bdxx.zjxx.bsgl[0]);
+                    label_zjxx_bsgl2_text.Content = Convert.ToString(bdxx.zjxx.bsgl[1]);
+                    label_zjxx_bsgl3_text.Content = Convert.ToString(bdxx.zjxx.bsgl[2]);
+                    label_zjxx_bsgl4_text.Content = Convert.ToString(bdxx.zjxx.bsgl[3]);
+                    label_zjxx_bsgl5_text.Content = Convert.ToString(bdxx.zjxx.bsgl[4]);
+                    label_zjxx_bsgl6_text.Content = Convert.ToString(bdxx.zjxx.bsgl[5]);
+                });
+                bdxx.print_flag &= ~BD.PRINT_ZJXX;
+            }
+            if ((bdxx.print_flag & BD.PRINT_SJXX) != 0)
+            {
 
-                            win.label_gntx_sq_text.Content = str + Convert.ToString(sq) + "区";
-                            win.label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
-                        }));
-                    }).Start();
+            }
+            if ((bdxx.print_flag & BD.PRINT_FKXX) != 0)
+            {
+                string str = "";
+                if (bdxx.fkxx.flbz == 0)
+                {
+                    str = "成功,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
+                    // bdxx.SEND_BLOCKTIME = 60;
+                }
+                else if (bdxx.fkxx.flbz == 1)
+                    str = "失败,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
+                else if (bdxx.fkxx.flbz == 2)
+                    str = "信号未锁定";
+                else if (bdxx.fkxx.flbz == 3)
+                    str = "电量不足";
+                else if (bdxx.fkxx.flbz == 4)
+                    str = "发射频度未到,时间:" + Convert.ToString(bdxx.fkxx.fjxx[3]) + "秒";
+                else if (bdxx.fkxx.flbz == 5)
+                    str = "加解密错误";
+                else if (bdxx.fkxx.flbz == 6)
+                    str = "CRC错误,指令:" + (char)(bdxx.fkxx.fjxx[0]) + (char)(bdxx.fkxx.fjxx[1]) + (char)(bdxx.fkxx.fjxx[2]) + (char)(bdxx.fkxx.fjxx[3]);
+                else if (bdxx.fkxx.flbz == 7)
+                    str = "用户级被抑制";
+                else if (bdxx.fkxx.flbz == 8)
+                    str = "抑制解除\n";
+                str += "  " + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                //new Thread(() =>
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
+
+                //        listbox_fkxx.Items.Add(new ListBoxItem().Content = str);
+                //    }));
+                //}).Start();
+                UIAction(() =>
+                {
+                    listbox_fkxx.Items.Insert(0,new ListBoxItem().Content = str);
+                });
+                bdxx.print_flag &= ~BD.PRINT_FKXX;
+            }
+            if ((bdxx.print_flag & BD.PRINT_GNTX) != 0)
+            {
+                sbyte sq = bdxx.gntx.sqlx;
+                string str = "";
+                if (sq >= 0)
+                {
+                    str = "东";
+                }
+                else
+                {
+                    str = "西";
+                    sq *= -1;
+                }
+                //new Thread(() =>
+                //{
+                //    Dispatcher.Invoke(new Action(() =>
+                //    {
+
+
+                //        label_gntx_sq_text.Content = str + Convert.ToString(sq) + "区";
+                //        label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                //    }));
+                //}).Start();
+                UIAction(() =>
+                {
+                    label_gntx_sq_text.Content = str + Convert.ToString(sq) + "区";
+                    label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                });
                     bdxx.print_flag &= ~BD.PRINT_GNTX;
-                }
-                if ((bdxx.print_flag & BD.PRINT_GNVX) != 0)
+            }
+            if ((bdxx.print_flag & BD.PRINT_GNVX) != 0)
+            {
+                //new Thread(() =>
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
+                //        label_gnvx_gwxgs_text.Content = Convert.ToString(bdxx.gnvx.gps_wxgs);
+                //        label_gnvx_bwxgs_text.Content = Convert.ToString(bdxx.gnvx.bds_wxgs);
+                //        listbox_gnvx_bwxxx.Items.Clear();
+                //        listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
+                //        listbox_gnvx_gwxxx.Items.Clear();
+                //        listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
+                //        for (int i = 0; i < bdxx.gnvx.bds_wxgs; ++i)
+                //            listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].xzb) + "db)");
+                //        for (int i = 0; i < bdxx.gnvx.gps_wxgs; ++i)
+                //            listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].xzb) + "db)");
+                //    }));
+                //}).Start();
+                UIAction(() =>
                 {
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            win.label_gnvx_gwxgs_text.Content = Convert.ToString(bdxx.gnvx.gps_wxgs);
-                            win.label_gnvx_bwxgs_text.Content = Convert.ToString(bdxx.gnvx.bds_wxgs);
-                            win.listbox_gnvx_bwxxx.Items.Clear();
-                            win.listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
-                            win.listbox_gnvx_gwxxx.Items.Clear();
-                            win.listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
-                            for (int i = 0; i < bdxx.gnvx.bds_wxgs; ++i)
-                                win.listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].xzb) + "db)");
-                            for (int i = 0; i < bdxx.gnvx.gps_wxgs; ++i)
-                                win.listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].xzb) + "db)");
-                        }));
-                    }).Start();
+                    label_gnvx_gwxgs_text.Content = Convert.ToString(bdxx.gnvx.gps_wxgs);
+                    label_gnvx_bwxgs_text.Content = Convert.ToString(bdxx.gnvx.bds_wxgs);
+                    listbox_gnvx_bwxxx.Items.Clear();
+                    listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
+                    listbox_gnvx_gwxxx.Items.Clear();
+                    listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
+                    for (int i = 0; i < bdxx.gnvx.bds_wxgs; ++i)
+                        listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].xzb) + "db)");
+                    for (int i = 0; i < bdxx.gnvx.gps_wxgs; ++i)
+                        listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].xzb) + "db)");
+                });
                     bdxx.print_flag &= ~BD.PRINT_GNVX;
-                }
-                if ((bdxx.print_flag & BD.PRINT_GNPX) != 0)
+            }
+            if ((bdxx.print_flag & BD.PRINT_GNPX) != 0)
+            {
+                // float wd, jd;
+                // wd= (float)bdxx.gnpx.wxm / 60
+                //new Thread(() =>
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
+                //        label_gnpx_jdfw_text.Content = (char)bdxx.gnpx.jdfw;
+                //        label_gnpx_jd_text.Content = Convert.ToString(bdxx.gnpx.jd);
+                //        label_gnpx_jf_text.Content = Convert.ToString(bdxx.gnpx.jf);
+                //        label_gnpx_jm_text.Content = Convert.ToString(bdxx.gnpx.jm);
+                //        label_gnpx_jxm_text.Content = Convert.ToString(bdxx.gnpx.jxm);
+                //        label_gnpx_wdfw_text.Content = (char)bdxx.gnpx.wdfw;
+                //        label_gnpx_wd_text.Content = Convert.ToString(bdxx.gnpx.wd);
+                //        label_gnpx_wf_text.Content = Convert.ToString(bdxx.gnpx.wf);
+                //        label_gnpx_wm_text.Content = Convert.ToString(bdxx.gnpx.wm);
+                //        label_gnpx_wxm_text.Content = Convert.ToString(bdxx.gnpx.wxm);
+                //        label_gnpx_gd_text.Content = Convert.ToString(bdxx.gnpx.gd) + "m";
+                //        label_gnpx_sd_text.Content = Convert.ToString(bdxx.gnpx.sd / 10.0) + "m/s";
+                //        label_gnpx_fx_text.Content = Convert.ToString(bdxx.gnpx.fx) + "°";
+                //        label_gnpx_wxs_text.Content = Convert.ToString(bdxx.gnpx.wxs);
+                //        label_gnpx_zt_text.Content = bdxx.gnpx.zt == 1 ? "已定位" : "未定位";
+                //        label_gnpx_jdxs_text.Content = Convert.ToString(bdxx.gnpx.jdxs);
+                //        label_gnpx_gjwc_text.Content = Convert.ToString(bdxx.gnpx.gjwc / 10.0) + "m";
+                //        textbox_gnpx_zhzb.Text = Convert.ToString((((bdxx.gnpx.wxm / 60.0) + bdxx.gnpx.wm) / 60.0 + bdxx.gnpx.wf) / 60.0 + bdxx.gnpx.wd) + "," + Convert.ToString((((bdxx.gnpx.jxm / 60.0) + bdxx.gnpx.jm) / 60.0 + bdxx.gnpx.jf) / 60.0 + bdxx.gnpx.jd);
+                //    }));
+                //}).Start();
+                UIAction(() =>
                 {
-                    // float wd, jd;
-                    // wd= (float)bdxx.gnpx.wxm / 60
-                    new Thread(() =>
-                    {
-                        win.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            win.label_gnpx_jdfw_text.Content = (char)bdxx.gnpx.jdfw;
-                            win.label_gnpx_jd_text.Content = Convert.ToString(bdxx.gnpx.jd);
-                            win.label_gnpx_jf_text.Content = Convert.ToString(bdxx.gnpx.jf);
-                            win.label_gnpx_jm_text.Content = Convert.ToString(bdxx.gnpx.jm);
-                            win.label_gnpx_jxm_text.Content = Convert.ToString(bdxx.gnpx.jxm);
-                            win.label_gnpx_wdfw_text.Content = (char)bdxx.gnpx.wdfw;
-                            win.label_gnpx_wd_text.Content = Convert.ToString(bdxx.gnpx.wd);
-                            win.label_gnpx_wf_text.Content = Convert.ToString(bdxx.gnpx.wf);
-                            win.label_gnpx_wm_text.Content = Convert.ToString(bdxx.gnpx.wm);
-                            win.label_gnpx_wxm_text.Content = Convert.ToString(bdxx.gnpx.wxm);
-                            win.label_gnpx_gd_text.Content = Convert.ToString(bdxx.gnpx.gd) + "m";
-                            win.label_gnpx_sd_text.Content = Convert.ToString(bdxx.gnpx.sd / 10.0) + "m/s";
-                            win.label_gnpx_fx_text.Content = Convert.ToString(bdxx.gnpx.fx) + "°";
-                            win.label_gnpx_wxs_text.Content = Convert.ToString(bdxx.gnpx.wxs);
-                            win.label_gnpx_zt_text.Content = bdxx.gnpx.zt == 1 ? "已定位" : "未定位";
-                            win.label_gnpx_jdxs_text.Content = Convert.ToString(bdxx.gnpx.jdxs);
-                            win.label_gnpx_gjwc_text.Content = Convert.ToString(bdxx.gnpx.gjwc / 10.0) + "m";
-                            win.textbox_gnpx_zhzb.Text = Convert.ToString((((bdxx.gnpx.wxm / 60.0) + bdxx.gnpx.wm) / 60.0 + bdxx.gnpx.wf) / 60.0 + bdxx.gnpx.wd) + "," + Convert.ToString((((bdxx.gnpx.jxm / 60.0) + bdxx.gnpx.jm) / 60.0 + bdxx.gnpx.jf) / 60.0 + bdxx.gnpx.jd);
-                        }));
-                    }).Start();
+                    label_gnpx_jdfw_text.Content = (char)bdxx.gnpx.jdfw;
+                    label_gnpx_jd_text.Content = Convert.ToString(bdxx.gnpx.jd);
+                    label_gnpx_jf_text.Content = Convert.ToString(bdxx.gnpx.jf);
+                    label_gnpx_jm_text.Content = Convert.ToString(bdxx.gnpx.jm);
+                    label_gnpx_jxm_text.Content = Convert.ToString(bdxx.gnpx.jxm);
+                    label_gnpx_wdfw_text.Content = (char)bdxx.gnpx.wdfw;
+                    label_gnpx_wd_text.Content = Convert.ToString(bdxx.gnpx.wd);
+                    label_gnpx_wf_text.Content = Convert.ToString(bdxx.gnpx.wf);
+                    label_gnpx_wm_text.Content = Convert.ToString(bdxx.gnpx.wm);
+                    label_gnpx_wxm_text.Content = Convert.ToString(bdxx.gnpx.wxm);
+                    label_gnpx_gd_text.Content = Convert.ToString(bdxx.gnpx.gd) + "m";
+                    label_gnpx_sd_text.Content = Convert.ToString(bdxx.gnpx.sd / 10.0) + "m/s";
+                    label_gnpx_fx_text.Content = Convert.ToString(bdxx.gnpx.fx) + "°";
+                    label_gnpx_wxs_text.Content = Convert.ToString(bdxx.gnpx.wxs);
+                    label_gnpx_zt_text.Content = bdxx.gnpx.zt == 1 ? "已定位" : "未定位";
+                    label_gnpx_jdxs_text.Content = Convert.ToString(bdxx.gnpx.jdxs);
+                    label_gnpx_gjwc_text.Content = Convert.ToString(bdxx.gnpx.gjwc / 10.0) + "m";
+                    textbox_gnpx_zhzb.Text = Convert.ToString((((bdxx.gnpx.wxm / 60.0) + bdxx.gnpx.wm) / 60.0 + bdxx.gnpx.wf) / 60.0 + bdxx.gnpx.wd) + "," + Convert.ToString((((bdxx.gnpx.jxm / 60.0) + bdxx.gnpx.jm) / 60.0 + bdxx.gnpx.jf) / 60.0 + bdxx.gnpx.jd);
+                });
                     bdxx.print_flag &= ~BD.PRINT_GNPX;
-
-                }
-
-                Thread.Sleep(100);
 
             }
 
+            //Thread.Sleep(100);
         }
 
 
@@ -362,7 +443,7 @@ namespace WpfApp_BD
         {
             // this.s();Application
             // Window.
-            myStartMain.app.Shutdown();
+            // myStartMain.app.Shutdown();
             System.Environment.Exit(0);
         }
 
@@ -447,7 +528,7 @@ namespace WpfApp_BD
                 cb_txxx_hexordec.Content = "ASCII";
             }
 
-            if (textbox_txxx_dwnr.Text != "")
+            if (textbox_txxx_dwnr.Text != string.Empty)
             {
                 if (this.cb_txxx_hexordec.IsChecked == true)
                 {
@@ -467,5 +548,7 @@ namespace WpfApp_BD
         {
 
         }
+
+
     }
 }

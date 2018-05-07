@@ -75,65 +75,7 @@ namespace WpfApp_BD
 
         }
 
-        /// <summary>
-        /// 打开串口
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnOpen_Click(object sender, EventArgs e)
-        {
-            //if (cbbComList.Items.Count <= 0)
-            //{
-            //    MessageBox.Show("没有发现串口,请检查线路！");
-            //    return;
-            //}
 
-            if (ComDevice.IsOpen == false)
-            {
-                //ComDevice.PortName = cbbComList.SelectedItem.ToString();
-                //ComDevice.BaudRate = Convert.ToInt32(cbbBaudRate.SelectedItem.ToString());
-                //ComDevice.Parity = (Parity)Convert.ToInt32(cbbParity.SelectedIndex.ToString());
-                //ComDevice.DataBits = Convert.ToInt32(cbbDataBits.SelectedItem.ToString());
-                //ComDevice.StopBits = (StopBits)Convert.ToInt32(cbbStopBits.SelectedItem.ToString());
-                ComDevice.PortName = "COM4";
-                ComDevice.BaudRate = 115200;
-                ComDevice.Parity = (Parity)0;
-                ComDevice.DataBits = 8;
-                ComDevice.StopBits = (StopBits)1;
-                try
-                {
-                    ComDevice.Open();
-                    //btnSend.Enabled = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                //btnOpen.Text = "关闭串口";
-                //pictureBox1.BackgroundImage = Properties.Resources.green;
-            }
-            else
-            {
-                try
-                {
-                    ComDevice.Close();
-                   // btnSend.Enabled = false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                //btnOpen.Text = "打开串口";
-                //pictureBox1.BackgroundImage = Properties.Resources.red;
-            }
-
-            //cbbComList.Enabled = !ComDevice.IsOpen;
-            //cbbBaudRate.Enabled = !ComDevice.IsOpen;
-            //cbbParity.Enabled = !ComDevice.IsOpen;
-            //cbbDataBits.Enabled = !ComDevice.IsOpen;
-            //cbbStopBits.Enabled = !ComDevice.IsOpen;
-        }
 
         /// <summary>
         /// 关闭串口
@@ -172,49 +114,7 @@ namespace WpfApp_BD
             return false;
         }
 
-        /// <summary>
-        /// 发送数据button事件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            //byte[] sendData = null;
-
-            //if (rbtnSendHex.Checked)
-            //{
-            //    sendData = strToHexByte(txtSendData.Text.Trim());
-            //}
-            //else if (rbtnSendASCII.Checked)
-            //{
-            //    sendData = Encoding.ASCII.GetBytes(txtSendData.Text.Trim());
-            //}
-            //else if (rbtnSendUTF8.Checked)
-            //{
-            //    sendData = Encoding.UTF8.GetBytes(txtSendData.Text.Trim());
-            //}
-            //else if (rbtnSendUnicode.Checked)
-            //{
-            //    sendData = Encoding.Unicode.GetBytes(txtSendData.Text.Trim());
-            //}
-            //else
-            //{
-            //    sendData = Encoding.ASCII.GetBytes(txtSendData.Text.Trim());
-            //}
-
-            //if (this.SendData(sendData))//发送数据成功计数
-            //{
-            //    lblSendCount.Invoke(new MethodInvoker(delegate
-            //    {
-            //        lblSendCount.Text = (int.Parse(lblSendCount.Text) + txtSendData.Text.Length).ToString();
-            //    }));
-            //}
-            //else
-            //{
-
-            //}
-
-        }
+ 
 
         /// <summary>
         /// 字符串转换16进制字节数组
@@ -249,86 +149,7 @@ namespace WpfApp_BD
                         myStartMain.bdxx.rebuff.wp = 0;
                 }
             }
-            this.AddData(ReDatas);//输出数据
         }
 
-        /// <summary>
-        /// 添加数据
-        /// </summary>
-        /// <param name="data">字节数组</param>
-        public void AddData(byte[] data)
-        {
-            //if (rbtnHex.Checked)
-            //{
-            //    StringBuilder sb = new StringBuilder();
-            //    for (int i = 0; i < data.Length; i++)
-            //    {
-            //        sb.AppendFormat("{0:x2}" + " ", data[i]);
-            //    }
-            //    AddContent(sb.ToString().ToUpper());
-            //}
-            //else if (rbtnASCII.Checked)
-            //{
-            //    AddContent(new ASCIIEncoding().GetString(data));
-            //}
-            //else if (rbtnUTF8.Checked)
-            //{
-            //    AddContent(new UTF8Encoding().GetString(data));
-            //}
-            //else if (rbtnUnicode.Checked)
-            //{
-            //    AddContent(new UnicodeEncoding().GetString(data));
-            //}
-            //else
-            //{ }
-
-            //lblRevCount.Invoke(new MethodInvoker(delegate
-            //{
-            //    lblRevCount.Text = (int.Parse(lblRevCount.Text) + data.Length).ToString();
-            //}));
-        }
-
-
-        /// <summary>
-        /// 输入到显示区域
-        /// </summary>
-        /// <param name="content"></param>
-        private void AddContent(string content)
-        {
-            //this.BeginInvoke(new MethodInvoker(delegate
-            //{
-            //    if (chkAutoLine.Checked && txtShowData.Text.Length > 0)
-            //    {
-            //        txtShowData.AppendText("\r\n");
-            //    }
-            //    txtShowData.AppendText(content);
-            //}));
-        }
-
-
-        /// <summary>
-        /// 清空接收区
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnClearRev_Click(object sender, EventArgs e)
-        {
-           // txtShowData.Clear();
-        }
-
-        /// <summary>
-        /// 清空发送区
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnClearSend_Click(object sender, EventArgs e)
-        {
-            //txtSendData.Clear();
-        }
-
-        private void lblSendCount_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

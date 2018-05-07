@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_BD"
         mc:Ignorable="d"
-        Title="北斗开发者选项" Height="847" Width="1080" FontSize="16" FontFamily="Microsoft YaHei UI Light" ResizeMode="CanMinimize" BorderThickness="0" Foreground="Black" Background="White" Closed="Window_Closed">
+        Title="北斗开发者选项" Height="847" Width="1080" FontSize="16" FontFamily="Microsoft YaHei UI Light" ResizeMode="CanMinimize" BorderThickness="0" Foreground="Black" Background="White" Closed="Window_Closed" Loaded="Window_Loaded">
     <Grid>
         <Button x:Name="btnicjc" Content="自爆指令" HorizontalAlignment="Left" Margin="965,697,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="75"/>
         <Label x:Name="Label_Init" Content="状态:" Margin="128,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"/>
