@@ -13,7 +13,7 @@ namespace BD_Protocol
     public partial class BD
     {
         public UINT print_flag = 0;
-        public const UINT PRINT_DWXX =(1 << 0);
+        public const UINT PRINT_DWXX = (1 << 0);
         public const UINT PRINT_TXXX = (1 << 1);
         public const UINT PRINT_ICXX = (1 << 2);
         public const UINT PRINT_ZJXX = (1 << 3);
@@ -265,7 +265,7 @@ namespace BD_Protocol
             icxx.yhdz = new UCHR[3];
             txxx.fxfdz = new UCHR[3];
             zjxx.bsgl = new UCHR[6];
-            
+
         }
         public void Init(MynewCOM com)
         {
@@ -291,7 +291,7 @@ namespace BD_Protocol
 
         void Thread_Extract(object source, System.Timers.ElapsedEventArgs e)
         {
-                Receive_Protocol();
+            Receive_Protocol();
         }
         void Thread_Check(object source, System.Timers.ElapsedEventArgs e)
         {
@@ -312,49 +312,49 @@ namespace BD_Protocol
                 MessageBox.Show("check_status_count=" + check_status_count, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 status &= 0;
                 status |= STATUS_BIT_ANSWER;
-                
+
             }
 
             if ((status & STATUS_BIT_ANSWER) != 0)//有回复
             {
-                check_status_count=0;
+                check_status_count = 0;
                 switch (status & ~STATUS_BIT_ANSWER)//检查确认位
                 {
                     case (STEP_NONE | STATUS_BIT_NO_CONFIRM):
-                        status = (byte)((STEP_NONE+1) | STATUS_BIT_ANSWER);//初始化
+                        status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);//初始化
                         break;
                     case (STEP_ICJC | STATUS_BIT_CONFIRM):
-                        status = (byte)((STEP_ICJC+1) | STATUS_BIT_ANSWER);
+                        status = (byte)((STEP_ICJC + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_ICJC | STATUS_BIT_NO_CONFIRM):
                         status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_GNPS | STATUS_BIT_CONFIRM):
-                        status = (byte)((STEP_GNPS+1) | STATUS_BIT_ANSWER);
+                        status = (byte)((STEP_GNPS + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_GNPS | STATUS_BIT_NO_CONFIRM):
                         status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_GNVS | STATUS_BIT_CONFIRM):
-                        status = (byte)((STEP_GNVS+1) | STATUS_BIT_ANSWER);
+                        status = (byte)((STEP_GNVS + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_GNVS | STATUS_BIT_NO_CONFIRM):
                         status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_GNTS | STATUS_BIT_CONFIRM):
-                        status = (byte)((STEP_GNTS+1) | STATUS_BIT_ANSWER);
+                        status = (byte)((STEP_GNTS + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_GNTS | STATUS_BIT_NO_CONFIRM):
                         status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_XJZJ | STATUS_BIT_CONFIRM):
-                        status = (byte)((STEP_XJZJ+1) | STATUS_BIT_ANSWER);
+                        status = (byte)((STEP_XJZJ + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_XJZJ | STATUS_BIT_NO_CONFIRM):
                         status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);
                         break;
                     case (STEP_SJSC | STATUS_BIT_CONFIRM):
-                        status = (byte)((STEP_SJSC+1) | STATUS_BIT_ANSWER);//就绪
+                        status = (byte)((STEP_SJSC + 1) | STATUS_BIT_ANSWER);//就绪
                         break;
                     case (STEP_SJSC | STATUS_BIT_NO_CONFIRM):
                         status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);
@@ -645,11 +645,11 @@ namespace BD_Protocol
             {
                 if (zjxx.bsgl[i] != 0)
                 {
-                    BSGL |= Convert.ToByte((1 << i)&0xff);
+                    BSGL |= Convert.ToByte((1 << i) & 0xff);
                 }
                 else
                 {
-                    BSGL &= Convert.ToByte((~(1 << i))&0xff);//error 原因未知
+                    BSGL &= Convert.ToByte((~(1 << i)) & 0xff);//error 原因未知
                 }
             }
 

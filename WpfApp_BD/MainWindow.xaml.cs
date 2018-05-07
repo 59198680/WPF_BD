@@ -192,7 +192,7 @@ namespace WpfApp_BD
                     label_txxx_fxsj_text.Content = Convert.ToString(bdxx.txxx.fxsj_h) + "时" + Convert.ToString(bdxx.txxx.fxsj_m) + "分";
                     label_txxx_dwcd_text.Content = Convert.ToString(bdxx.txxx.dwcd / 8.0) + "bytes(" + Convert.ToString(bdxx.txxx.dwcd) + "bits)";
                     label_txxx_crc_text.Content = Convert.ToString(bdxx.txxx.crc);
-                    label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                    label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + String.Format(":{0:x2}", bdxx.gntx.minute) + String.Format(":{0:x2}", bdxx.gntx.second);
                     if (cb_txxx_hexordec.IsChecked == true)
                     {
                         StringBuilder sb = new StringBuilder();
@@ -310,7 +310,7 @@ namespace WpfApp_BD
                 //}).Start();
                 UIAction(() =>
                 {
-                    listbox_fkxx.Items.Insert(0,new ListBoxItem().Content = str);
+                    listbox_fkxx.Items.Insert(0, new ListBoxItem().Content = str);
                 });
                 bdxx.print_flag &= ~BD.PRINT_FKXX;
             }
@@ -340,9 +340,9 @@ namespace WpfApp_BD
                 UIAction(() =>
                 {
                     label_gntx_sq_text.Content = str + Convert.ToString(sq) + "区";
-                    label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+                    label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + String.Format(":{0:x2}", bdxx.gntx.minute) + String.Format(":{0:x2}", bdxx.gntx.second);
                 });
-                    bdxx.print_flag &= ~BD.PRINT_GNTX;
+                bdxx.print_flag &= ~BD.PRINT_GNTX;
             }
             if ((bdxx.print_flag & BD.PRINT_GNVX) != 0)
             {
@@ -375,7 +375,7 @@ namespace WpfApp_BD
                     for (int i = 0; i < bdxx.gnvx.gps_wxgs; ++i)
                         listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].xzb) + "db)");
                 });
-                    bdxx.print_flag &= ~BD.PRINT_GNVX;
+                bdxx.print_flag &= ~BD.PRINT_GNVX;
             }
             if ((bdxx.print_flag & BD.PRINT_GNPX) != 0)
             {
@@ -426,7 +426,7 @@ namespace WpfApp_BD
                     label_gnpx_gjwc_text.Content = Convert.ToString(bdxx.gnpx.gjwc / 10.0) + "m";
                     textbox_gnpx_zhzb.Text = Convert.ToString((((bdxx.gnpx.wxm / 60.0) + bdxx.gnpx.wm) / 60.0 + bdxx.gnpx.wf) / 60.0 + bdxx.gnpx.wd) + "," + Convert.ToString((((bdxx.gnpx.jxm / 60.0) + bdxx.gnpx.jm) / 60.0 + bdxx.gnpx.jf) / 60.0 + bdxx.gnpx.jd);
                 });
-                    bdxx.print_flag &= ~BD.PRINT_GNPX;
+                bdxx.print_flag &= ~BD.PRINT_GNPX;
 
             }
 

@@ -9,7 +9,7 @@
     <Grid>
         <ComboBox x:Name="RateListCbobox" HorizontalAlignment="Left" Margin="101,220,0,0" VerticalAlignment="Top" IsEditable="True" FontSize="16" Width="120"/>
         <ComboBox x:Name="AvailableComCbobox" HorizontalAlignment="Left" Margin="101,152,0,0" VerticalAlignment="Top" Width="120" FontSize="16"/>
-        <Button x:Name="cb_open" Content="Button" HorizontalAlignment="Left" Margin="116,300,0,0" VerticalAlignment="Top" Width="87" Height="22" FontSize="16" Click="cb_open_Click"/>
+        <Button x:Name="cb_open" Content="打开" HorizontalAlignment="Left" Margin="116,300,0,0" VerticalAlignment="Top" Width="87" Height="22" FontSize="16" Click="cb_open_Click"/>
 
     </Grid>
 </Window>

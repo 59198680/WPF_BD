@@ -20,9 +20,9 @@ namespace WpfApp_BD
         //private bool WaitClose = false;//invoke里判断是否正在关闭串口是否正在关闭串口，执行Application.DoEvents，并阻止再次invoke ,解决关闭串口时，程序假死，具体参见http://news.ccidnet.com/art/32859/20100524/2067861_4.html 仅在单线程收发使用，但是在公共代码区有相关设置，所以未用#define隔离
         private static bool Sending = false;//正在发送数据状态字
         private static Thread _ComSend;//发送数据线程
-        public MynewCOM(string PortName, int BaudRate,BD b)
+        public MynewCOM(string PortName, int BaudRate, BD b)
         {
-            bdxx=b;
+            bdxx = b;
             ComPort.PortName = PortName;
             ComPort.BaudRate = BaudRate;
             ComPort.Parity = (Parity)0;
@@ -41,7 +41,7 @@ namespace WpfApp_BD
             {
                 ComPort.Open();//打开串口
             }
-            catch (Exception e )
+            catch (Exception e)
             {
                 MessageBox.Show(e.ToString() + "无法打开，原因未知！");
                 //MessageBox.Show("无法打开串口,请检测此串口是否有效或被其他占用！");
@@ -82,7 +82,7 @@ namespace WpfApp_BD
 
 
                 }
-                catch(Exception e)//如果无法发送，产生异常
+                catch (Exception e)//如果无法发送，产生异常
                 {
                     MessageBox.Show(e.ToString() + "无法接收数据，原因未知！");
                 }
@@ -115,7 +115,7 @@ namespace WpfApp_BD
             catch
             {
 
-                MessageBox.Show(e.ToString()+"无法接收数据，原因未知！");
+                MessageBox.Show(e.ToString() + "无法接收数据，原因未知！");
             }
         }
     }

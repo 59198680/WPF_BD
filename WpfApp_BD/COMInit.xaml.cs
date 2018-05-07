@@ -112,7 +112,7 @@ namespace WpfApp_BD
                 ComPort.DataBits = 8;//设置当前数据位
                 ComPort.StopBits = (StopBits)1;//设置当前停止位                    
                 //ComPort.Open();//打开串口
-                mycom = new MynewCOM(AvailableComCbobox.SelectedValue.ToString(), Convert.ToInt32(RateListCbobox.SelectedValue),bdxx);
+                mycom = new MynewCOM(AvailableComCbobox.SelectedValue.ToString(), Convert.ToInt32(RateListCbobox.SelectedValue), bdxx);
                 mycom.Open();
                 bdxx.Init(mycom);
                 this.Hide();
