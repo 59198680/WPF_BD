@@ -1,4 +1,20 @@
-﻿using System;
+﻿/***********************Project Version1.0*************************
+@项目名:北斗传输4.0(C#)
+
+@File_name:COMInit.xmal.cs
+
+@File_UpdateTime:2018年5月16日02:25:23
+
+@File_Version:1.0a
+
+@说明:实现接收数据的处理
+
+本程序基于.Net4.6.1编写的北斗短报文传输程序
+界面使用WPF框架编写
+在vs2017里运行通过
+
+******************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

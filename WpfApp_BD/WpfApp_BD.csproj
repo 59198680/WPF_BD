@@ -93,14 +93,12 @@
     </Compile>
     <Compile Include="BD.cs" />
     <Compile Include="Extract_xx.cs" />
-    <Compile Include="main.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mySerialPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

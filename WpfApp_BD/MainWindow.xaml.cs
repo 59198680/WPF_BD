@@ -1,4 +1,20 @@
-﻿using System;
+﻿/***********************Project Version1.0*************************
+@项目名:北斗传输4.0(C#)
+
+@File_name:MainWindow.xaml.cs
+
+@File_UpdateTime:2018年5月16日02:25:23
+
+@File_Version:1.0a
+
+@说明:展示界面的动态显示
+
+本程序基于.Net4.6.1编写的北斗短报文传输程序
+界面使用WPF框架编写
+在vs2017里运行通过
+
+******************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
@@ -192,7 +208,7 @@ namespace WpfApp_BD
                     label_txxx_fxsj_text.Content = Convert.ToString(bdxx.txxx.fxsj_h) + "时" + Convert.ToString(bdxx.txxx.fxsj_m) + "分";
                     label_txxx_dwcd_text.Content = Convert.ToString(bdxx.txxx.dwcd / 8.0) + "bytes(" + Convert.ToString(bdxx.txxx.dwcd) + "bits)";
                     label_txxx_crc_text.Content = Convert.ToString(bdxx.txxx.crc);
-                    label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + String.Format(":{0:x2}", bdxx.gntx.minute) + String.Format(":{0:x2}", bdxx.gntx.second);
+                    label_txxx_lasttime_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + String.Format(":{0:D2}", bdxx.gntx.minute) + String.Format(":{0:D2}", bdxx.gntx.second);
                     if (cb_txxx_hexordec.IsChecked == true)
                     {
                         StringBuilder sb = new StringBuilder();
@@ -340,7 +356,7 @@ namespace WpfApp_BD
                 UIAction(() =>
                 {
                     label_gntx_sq_text.Content = str + Convert.ToString(sq) + "区";
-                    label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + String.Format(":{0:x2}", bdxx.gntx.minute) + String.Format(":{0:x2}", bdxx.gntx.second);
+                    label_gntx_sj_text.Content = Convert.ToString(bdxx.gntx.year) + "年" + Convert.ToString(bdxx.gntx.month) + "月" + Convert.ToString(bdxx.gntx.day) + "日" + Convert.ToString(bdxx.gntx.hour) + String.Format(":{0:D2}", bdxx.gntx.minute) + String.Format(":{0:D2}", bdxx.gntx.second);
                 });
                 bdxx.print_flag &= ~BD.PRINT_GNTX;
             }

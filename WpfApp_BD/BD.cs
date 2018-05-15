@@ -1,4 +1,20 @@
-﻿using System;
+﻿/***********************Project Version1.0*************************
+@项目名:北斗传输4.0(C#)
+
+@File_name:BD.cs
+
+@File_UpdateTime:2018年5月16日02:25:23
+
+@File_Version:1.0a
+
+@说明:实现基本功能
+
+本程序基于.Net4.6.1编写的北斗短报文传输程序
+界面使用WPF框架编写
+在vs2017里运行通过
+
+******************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,10 +42,10 @@ namespace BD_Protocol
         public const UINT PRINT_BLOCK = (1 << 10);
         public const int DATA_FIRM_LENTH = 6;
         public const int BD_PRINT_TIME_SEQ = 8;
-        public const int BD_PRINT_GNPX_SEQ = 5;
+        public const int BD_PRINT_GNPX_SEQ = 1;
         public const int BD_PRINT_GNTX_ZONE = 8;
         public const int BD_PRINT_GNTX_SEQ = 1;
-        public const int BD_PRINT_GNVX_SEQ = 5;
+        public const int BD_PRINT_GNVX_SEQ = 1;
         public const int RE_BUFFER_SIZE = 4095;
         //extern int (* myprint) (_In_z_ _Printf_format_string_ char const* const, ...);
         public UCHR SEND_BLOCKTIME = 0;
@@ -106,10 +122,10 @@ namespace BD_Protocol
         public struct BD_GNVX
         {
             public UCHR wxlb;//卫星类别
-            public UCHR gps_wxgs;//卫星个数
-            public WXXX[] gps_wxxx;//卫星信息
-            public UCHR bds_wxgs;//卫星个数
-            public WXXX[] bds_wxxx;//卫星信息
+            public UCHR gps_wxgs;//gps卫星个数
+            public WXXX[] gps_wxxx;//gps卫星信息
+            public UCHR bds_wxgs;//bds卫星个数
+            public WXXX[] bds_wxxx;//bds卫星信息
         };
         public struct BD_DWSQ  //定位申请
         {
@@ -641,6 +657,8 @@ namespace BD_Protocol
         {
             if ((zjxx.iczt != 0) || (zjxx.yjzt != 0) || (zjxx.rzzt != 0x02))
                 error_flag = 1;
+            else
+                error_flag = 0;
             for (int i = 0; i < 6; ++i)
             {
                 if (zjxx.bsgl[i] != 0)
@@ -649,7 +667,7 @@ namespace BD_Protocol
                 }
                 else
                 {
-                    BSGL &= Convert.ToByte((~(1 << i)) & 0xff);//error 原因未知
+                    BSGL &= Convert.ToByte((~(1 << i)) & 0xff);
                 }
             }
 

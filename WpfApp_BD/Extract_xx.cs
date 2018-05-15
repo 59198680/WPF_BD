@@ -1,4 +1,20 @@
-﻿using System;
+﻿/***********************Project Version1.0*************************
+@项目名:北斗传输4.0(C#)
+
+@File_name:Extract_xx.cs
+
+@File_UpdateTime:2018年5月16日02:25:23
+
+@File_Version:1.0a
+
+@说明:实现接收数据的解析
+
+本程序基于.Net4.6.1编写的北斗短报文传输程序
+界面使用WPF框架编写
+在vs2017里运行通过
+
+******************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,15 +48,6 @@ namespace BD_Protocol
             dwxx.S = UCHRtoUINT(buf[((i + 28) & RE_BUFFER_SIZE)], buf[((i + 29) & RE_BUFFER_SIZE)]);
             //print_dwxx();
             print_flag |= PRINT_DWXX;
-            try
-            {
-               // WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
         }
 
         void Extract_TXXX(UCHR[] buf, UINT i)
@@ -67,15 +74,6 @@ namespace BD_Protocol
                 txxx.crc = buf[((i + 18 + txxx.dwcd / 8 + 1) & RE_BUFFER_SIZE)];
             //print_txxx();
             print_flag |= PRINT_TXXX;
-            try
-            {
-               // WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
 
         }
 
@@ -95,15 +93,6 @@ namespace BD_Protocol
                 status |= Convert.ToByte(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM);
             // print_icxx();
             print_flag |= PRINT_ICXX;
-            try
-            {
-               // WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
         }
 
         void Extract_ZJXX(UCHR[] buf, UINT i)
@@ -117,17 +106,6 @@ namespace BD_Protocol
                 zjxx.bsgl[ii] = buf[((i + 14 + ii) & RE_BUFFER_SIZE)];
             }
             Handle_ZJXX();
-            // if(WpfApp_BD.MainWindow.sema.)
-            try
-            {
-               // WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
-
             // print_zjxx();
             print_flag |= PRINT_ZJXX;
             if ((status & ~(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM)) == STEP_XJZJ)
@@ -147,15 +125,6 @@ namespace BD_Protocol
             sjxx.second = buf[((i + 16) & RE_BUFFER_SIZE)];
             // print_sjxx();
             print_flag |= PRINT_SJXX;
-            try
-            {
-               // WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
             if ((status & ~(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM)) == STEP_SJSC)
                 status |= Convert.ToByte(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM);
         }
@@ -170,18 +139,8 @@ namespace BD_Protocol
             fkxx.fjxx[3] = buf[((i + 14) & RE_BUFFER_SIZE)];
             Handle_FXXX();
             print_flag |= PRINT_FKXX;
-            try
-            {
-               // WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
             // print_fkxx();
-            /*if ((status & 0x3f) == 0x01)  //TODO
-            status |= 0xC0;*/
+
         }
 
         void Extract_GNTX(UCHR[] buf, UINT i)
@@ -196,15 +155,6 @@ namespace BD_Protocol
             gntx.second = buf[((i + 16) & RE_BUFFER_SIZE)];
             // print_gntx();
             print_flag |= PRINT_GNTX;
-            try
-            {
-                //WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
             if ((status & ~(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM)) == STEP_GNTS)
                 status |= Convert.ToByte(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM);
         }
@@ -231,15 +181,6 @@ namespace BD_Protocol
             gnpx.gjwc = UCHRtoUINT(buf[((i + 29) & RE_BUFFER_SIZE)], buf[((i + 30) & RE_BUFFER_SIZE)]);
             // print_gnpx();
             print_flag |= PRINT_GNPX;
-            try
-            {
-                //WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
             if ((status & ~(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM)) == STEP_GNPS)
                 status |= Convert.ToByte(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM);
         }
@@ -277,15 +218,6 @@ namespace BD_Protocol
 
             //print_gnvx();
             print_flag |= PRINT_GNVX;
-            try
-            {
-              // WpfApp_BD.MainWindow.sema.Release();
-            }
-            catch (Exception)
-            {
-
-                // throw;
-            }
             if ((status & ~(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM)) == STEP_GNVS)
                 status |= Convert.ToByte(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM);
 
