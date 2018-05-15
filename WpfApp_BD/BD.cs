@@ -1,11 +1,11 @@
 ﻿/***********************Project Version1.0*************************
 @项目名:北斗传输4.0(C#)
-
-@File_name:BD.cs
-
-@File_UpdateTime:2018年5月16日02:25:23
-
+@File:BD.cs
 @File_Version:1.0a
+@Author:lys
+@QQ:591986780
+@UpdateTime:2018年5月16日02:25:23
+
 
 @说明:实现基本功能
 
