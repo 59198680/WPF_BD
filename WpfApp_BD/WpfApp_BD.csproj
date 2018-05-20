@@ -74,11 +74,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BD_Protol\BaiduAPI.cs" />
     <Compile Include="COMInit.xaml.cs">
       <DependentUpon>COMInit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MynewCOM.cs" />
-    <Compile Include="Receive_Protocol.cs" />
+    <Compile Include="BD_Protol\MynewCOM.cs" />
+    <Compile Include="BD_Protol\Receive_Protocol.cs" />
     <Page Include="COMInit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -91,14 +92,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BD.cs" />
-    <Compile Include="Extract_xx.cs" />
+    <Compile Include="BD_Protol\BD.cs" />
+    <Compile Include="BD_Protol\Extract_xx.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyDataBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -125,7 +127,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BD_Protol\" />
+    <Resource Include="BD_Protol\Update_Log.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

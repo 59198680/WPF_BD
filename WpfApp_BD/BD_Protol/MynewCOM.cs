@@ -1,4 +1,4 @@
-﻿/***********************Project Version1.0*************************
+﻿/***********************Project Version1.1*************************
 @项目名:北斗传输4.0(C#)
 @File:COMInit.xmal.cs
 @File_Version:1.0a
@@ -59,6 +59,23 @@ namespace WpfApp_BD
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString() + "无法打开，原因未知！");
+                //MessageBox.Show("无法打开串口,请检测此串口是否有效或被其他占用！");
+                res = false;
+                throw;
+            }
+            return res;
+
+        }
+        public bool Close()
+        {
+            bool res = true;
+            try
+            {
+                ComPort.Close();//打开串口
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString() + "无法关闭，原因未知！");
                 //MessageBox.Show("无法打开串口,请检测此串口是否有效或被其他占用！");
                 res = false;
                 throw;

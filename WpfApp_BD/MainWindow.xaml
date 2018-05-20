@@ -53,6 +53,7 @@
             <Label x:Name="label_zjxx_bsgl6" Content="6:" HorizontalAlignment="Left" Margin="603,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
             <Label x:Name="label_zjxx_bsgl5_text" Content="null" HorizontalAlignment="Left" Margin="510,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
             <Label x:Name="label_zjxx_bsgl5" Content="5:" HorizontalAlignment="Left" Margin="487,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
+            <Label x:Name="label_zbdz" Content="" HorizontalAlignment="Left" Margin="684,101,-264,0" VerticalAlignment="Top" Height="39" Width="285" Panel.ZIndex="10" FontSize="14" Padding="0" HorizontalContentAlignment="Center"/>
         </Grid>
         <Label x:Name="label_gntx_sj" Content="时间:" HorizontalAlignment="Left" Margin="811,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
         <Label x:Name="label_gntx_sq_text" Content="null" HorizontalAlignment="Left" Margin="757,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
@@ -89,8 +90,7 @@
             <Label x:Name="label_gnpx_wxm" Content="纬小秒:" HorizontalAlignment="Left" Margin="533,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
             <Label x:Name="label_gnpx_wdfw_text" Content="null" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
         </Grid>
-        <Label x:Name="label_gnpx_zhzb" Content="转换坐标" HorizontalAlignment="Left" Margin="848,234,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <TextBox x:Name="textbox_gnpx_zhzb" HorizontalAlignment="Left" Height="23" Margin="744,269,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="287" Panel.ZIndex="10" TextChanged="TextBox_TextChanged"/>
+        <TextBox x:Name="textbox_gnpx_zhzb" HorizontalAlignment="Left" Height="23" Margin="744,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="287" Panel.ZIndex="10" TextChanged="TextBox_TextChanged"/>
         <Grid Margin="61,304,52,470" Panel.ZIndex="9">
             <Label x:Name="label_gnpx_gd" Content="高度:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
             <Label x:Name="label_gnpx_sd_text" Content="null" HorizontalAlignment="Left" Margin="196,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>

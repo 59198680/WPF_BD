@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.0*************************
+﻿/***********************Project Version1.1*************************
 @项目名:北斗传输4.0(C#)
 @File:Extract_xx.cs
-@File_Version:1.0a
+@File_Version:1.1
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月16日02:25:23
+@UpdateTime:2018年5月21日03:35:28
 
 @说明:实现接收数据的解析
 
@@ -64,6 +64,7 @@ namespace BD_Protocol
                 txxx.dwnr[ii] = buf[((i + 18 + ii) & RE_BUFFER_SIZE)];
             }
             UINT temp = txxx.dwcd / 8;
+            
             Analysis_data(ref txxx.fxfdz, ref txxx.fxsj_h, ref txxx.fxsj_m, ref txxx.dwnr, ref temp);
             //注意有长度无内容的情况 TODO
             //注意长度不是字节整数
@@ -179,6 +180,7 @@ namespace BD_Protocol
             gnpx.jdxs = buf[((i + 28) & RE_BUFFER_SIZE)];
             gnpx.gjwc = UCHRtoUINT(buf[((i + 29) & RE_BUFFER_SIZE)], buf[((i + 30) & RE_BUFFER_SIZE)]);
             // print_gnpx();
+            Handle_GNPX();
             print_flag |= PRINT_GNPX;
             if ((status & ~(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM)) == STEP_GNPS)
                 status |= Convert.ToByte(STATUS_BIT_ANSWER | STATUS_BIT_CONFIRM);

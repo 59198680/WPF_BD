@@ -1,11 +1,10 @@
-﻿/***********************Project Version1.0*************************
+﻿/***********************Project Version1.1*************************
 @项目名:北斗传输4.0(C#)
 @File:BD.cs
-@File_Version:1.0a
+@File_Version:1.1
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月16日02:25:23
-
+@UpdateTime:2018年5月21日03:20:37
 
 @说明:实现基本功能
 
@@ -40,15 +39,16 @@ namespace BD_Protocol
         public const UINT PRINT_GNPX = (1 << 8);
         public const UINT PRINT_STATUS = (1 << 9);
         public const UINT PRINT_BLOCK = (1 << 10);
+        public const UINT PRINT_FIRST_ADDRESS = (1 << 11);
         public const int DATA_FIRM_LENTH = 6;
         public const int BD_PRINT_TIME_SEQ = 8;
         public const int BD_PRINT_GNPX_SEQ = 1;
         public const int BD_PRINT_GNTX_ZONE = 8;
         public const int BD_PRINT_GNTX_SEQ = 1;
         public const int BD_PRINT_GNVX_SEQ = 1;
-        public const int RE_BUFFER_SIZE = 4095;
+        public const int RE_BUFFER_SIZE = 8191;
         //extern int (* myprint) (_In_z_ _Printf_format_string_ char const* const, ...);
-        public UCHR SEND_BLOCKTIME = 0;
+        public volatile UCHR SEND_BLOCKTIME = 0;
         //第八位为回复位，第七位为确认位,第六位预留,1-5位步骤
         public const UCHR STEP_NONE = 0;
         public const UCHR STEP_ICJC = 5;
@@ -67,6 +67,10 @@ namespace BD_Protocol
         public UCHR status = 0x80;
         public UCHR error_flag = 0;
         public UCHR BSGL = 0;//波束功率0-5位
+        public bool First_Run_POS = true;
+        public string address = "";
+        Thread thread_extract;
+        Thread thread_check;
         System.Timers.Timer timer_extract;
         System.Timers.Timer timer_check;
         public struct RE_BUFFER
@@ -77,7 +81,7 @@ namespace BD_Protocol
         };
 
         public RE_BUFFER rebuff;
-        MynewCOM mycom;
+        public MynewCOM mycom;
 
         public struct BD_GNTX
         {
@@ -290,34 +294,59 @@ namespace BD_Protocol
             rebuff.rp = 0;
             rebuff.wp = 0;
 
-            timer_extract = new System.Timers.Timer(100);//实例化Timer类，设置间隔时间为100毫秒；     
-            timer_extract.Elapsed += new System.Timers.ElapsedEventHandler(Thread_Extract);//到达时间的时候执行事件；   
-            timer_extract.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
-            timer_extract.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
+            //timer_extract = new System.Timers.Timer(100);//实例化Timer类，设置间隔时间为100毫秒；     
+            //timer_extract.Elapsed += new System.Timers.ElapsedEventHandler(Thread_Extract);//到达时间的时候执行事件；   
+            //timer_extract.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
+            //timer_extract.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
 
-            timer_check = new System.Timers.Timer(1000);//实例化Timer类，设置间隔时间为1000毫秒；     
-            timer_check.Elapsed += new System.Timers.ElapsedEventHandler(Thread_Check);//到达时间的时候执行事件；   
-            timer_check.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
-            timer_check.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
-
-
+            //timer_check = new System.Timers.Timer(1000);//实例化Timer类，设置间隔时间为1000毫秒；     
+            //timer_check.Elapsed += new System.Timers.ElapsedEventHandler(Thread_Check);//到达时间的时候执行事件；   
+            //timer_check.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
+            //timer_check.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
+            thread_check = new Thread(new ThreadStart(Thread_Check));
+            thread_extract = new Thread(new ThreadStart(Thread_Extract));
+            thread_check.IsBackground = true;
+            thread_extract.IsBackground = true;
+            thread_extract.Start();
+            thread_check.Start();
         }
 
         UINT check_status_count = 0;
 
-        void Thread_Extract(object source, System.Timers.ElapsedEventArgs e)
+        void Thread_Extract()
         {
-            Receive_Protocol();
-        }
-        void Thread_Check(object source, System.Timers.ElapsedEventArgs e)
-        {
-            Check_status();
-            if (SEND_BLOCKTIME != 0)
+            while (true)
             {
-                --SEND_BLOCKTIME;
-                print_flag |= PRINT_BLOCK;
+                Receive_Protocol();
+                Thread.Sleep(100);
             }
         }
+        void Thread_Check()
+        {
+            while (true)
+            {
+                Check_status();
+                if (SEND_BLOCKTIME != 0)
+                {
+                    --SEND_BLOCKTIME;
+                    print_flag |= PRINT_BLOCK;
+                }
+                Thread.Sleep(1000);
+            }
+        }
+        //void Thread_Extract(object source, System.Timers.ElapsedEventArgs e)
+        //{
+        //    Receive_Protocol();
+        //}
+        //void Thread_Check(object source, System.Timers.ElapsedEventArgs e)
+        //{
+        //    Check_status();
+        //    if (SEND_BLOCKTIME != 0)
+        //    {
+        //        --SEND_BLOCKTIME;
+        //        print_flag |= PRINT_BLOCK;
+        //    }
+        //}
 
         public void Check_status()
         {
@@ -377,11 +406,12 @@ namespace BD_Protocol
                         break;
                     default:
                         byte[] aaa = new byte[255];
+                        byte[] id = { 0x04, 0x7c, 0x66 };
                         for (int i = 0; i < 10; ++i)
                         {
                             aaa[i] = (byte)(i + 0x30);
                         }
-                        this.BD_send(ref aaa, (UINT)(10), this.icxx.yhdz);
+                        this.BD_send(ref aaa, (UINT)(10), id);
                         break;
                 }
             }
@@ -549,21 +579,11 @@ namespace BD_Protocol
                 UCHR[] send_buffer;
                 send_buffer = new UCHR[len + DATA_FIRM_LENTH];
                 TXSQ_send(Data_encapsulation(send_buffer, ref buffer, ref len), len + DATA_FIRM_LENTH, dis);
-                //txsq_send(buffer, len, dis);
-                //if (send_buffer != null)
-                //    free(send_buffer);
+
             }
             else
             {
-                //if (BSGL!=0)
-                //    myprint("无波束  ");
-                //if (error_flag)
-                //    myprint("硬件错误  ");
-                //if (SEND_BLOCKTIME)
-                //    myprint("频度未到:%d秒  ", SEND_BLOCKTIME);
-                //if (!len)
-                //    myprint("发送长度为0  ");
-                //myprint("\n");
+
             }
         }
 
@@ -651,7 +671,33 @@ namespace BD_Protocol
 
             return checksum;
         }
+        UINT count_time = 0;
+        void Handle_GNPX()
+        {
+            if (First_Run_POS == true && gnpx.zt == 1)
+            {
+                if (count_time == 0)
+                {
+                    if (BaiduAPI.Geocoding_API(Convert.ToString((((gnpx.jxm / 60.0) + gnpx.jm) / 60.0 + gnpx.jf) / 60.0 + gnpx.jd),
+                                                Convert.ToString((((gnpx.wxm / 60.0) + gnpx.wm) / 60.0 + gnpx.wf) / 60.0 + gnpx.wd), ref address) == true)
+                    {
+                        First_Run_POS = false;
+                    }
+                    else
+                    {
+                        count_time += BD_PRINT_GNPX_SEQ;
+                    }
+                    print_flag |= PRINT_FIRST_ADDRESS;
+                }
+                else
+                {
+                    count_time += BD_PRINT_GNPX_SEQ;
+                    if (count_time >= 60)//如果调用API失败,控制在60秒内不再调用
+                        count_time = 0;
+                }
 
+            }
+        }
 
         void Handle_ZJXX()
         {
@@ -679,7 +725,7 @@ namespace BD_Protocol
             {
                 SEND_BLOCKTIME = fkxx.fjxx[3];
             }
-            if (fkxx.flbz == 1)
+            if (fkxx.flbz == 0)
             {
                 SEND_BLOCKTIME = 60;
             }
@@ -761,22 +807,47 @@ namespace BD_Protocol
 
                         UINT _LENGTH = length - 2;
                         UCHR[] exdata = new UCHR[_LENGTH];
-                        //memcpy(exdata, buffer[3], length - 2);
                         System.Buffer.BlockCopy(buffer, 3, exdata, 0, Convert.ToInt32(_LENGTH));
                         DATA_Handler(ref fxfdz, ref h, ref m, ref exdata, ref _LENGTH);
-                        //free(exdata);
                     }
 
                 }
             }
         }
-
+        string temp_addr = "";
         void DATA_Handler(ref UCHR[] fxfdz, ref UCHR h, ref UCHR m, ref UCHR[] data, ref UINT lenth)
         {
             //TODO
-            //for (UINT i = 0; i<lenth; ++i)
-            //    printf("%c", * data + i);
-            //    printf("\n");
+            if (data[0] == 0)//短报文
+            {
+                int id = (fxfdz[0] << 16) | (fxfdz[1] << 8) | fxfdz[2];
+                float temp = (float)(((Convert.ToUInt16(data[1] & 0x7f) << 8) | data[2]) / 1000.0);
+                if ((data[1] & 0x80) == 1)
+                {
+                    temp *= -1;
+                }
+                float mq135 = (float)(((Convert.ToUInt16(data[3]) << 8) | data[4]) / 10000.0);
+                char jdfw = (data[9] & 0x80) == 1 ? 'W' : 'E';
+                char wdfw = (data[6] & 0x80) == 1 ? 'S' : 'N';
+                data[9] &= 0x7F;
+                data[6] &= 0x7F;
+                if (BaiduAPI.Geocoding_API(Convert.ToString((data[10] / 60.0 + data[9]) / 60.0 + data[8]),
+                                                Convert.ToString((data[7] / 60.0 + data[6]) / 60.0 + data[5]), ref temp_addr)==true)
+                {
+                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second), temp_addr))
+                    {
+                        MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second), ""))
+                    {
+                        MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+            }
         }
     }
 
