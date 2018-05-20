@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.1*************************
+﻿/***********************Project Version1.2*************************
 @项目名:北斗传输4.0(C#)
 @File:BD.cs
-@File_Version:1.1
+@File_Version:1.2
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月21日03:20:37
+@UpdateTime:2018年5月21日04:05:25
 
 @说明:实现基本功能
 
@@ -678,8 +678,8 @@ namespace BD_Protocol
             {
                 if (count_time == 0)
                 {
-                    if (BaiduAPI.Geocoding_API(Convert.ToString((((gnpx.jxm / 60.0) + gnpx.jm) / 60.0 + gnpx.jf) / 60.0 + gnpx.jd),
-                                                Convert.ToString((((gnpx.wxm / 60.0) + gnpx.wm) / 60.0 + gnpx.wf) / 60.0 + gnpx.wd), ref address) == true)
+                    if (BaiduAPI.Geocoding_API(Convert.ToString((((gnpx.wxm / 60.0) + gnpx.wm) / 60.0 + gnpx.wf) / 60.0 + gnpx.wd),
+                        Convert.ToString((((gnpx.jxm / 60.0) + gnpx.jm) / 60.0 + gnpx.jf) / 60.0 + gnpx.jd), ref address) == true)
                     {
                         First_Run_POS = false;
                     }
@@ -831,8 +831,8 @@ namespace BD_Protocol
                 char wdfw = (data[6] & 0x80) == 1 ? 'S' : 'N';
                 data[9] &= 0x7F;
                 data[6] &= 0x7F;
-                if (BaiduAPI.Geocoding_API(Convert.ToString((data[10] / 60.0 + data[9]) / 60.0 + data[8]),
-                                                Convert.ToString((data[7] / 60.0 + data[6]) / 60.0 + data[5]), ref temp_addr)==true)
+                if (BaiduAPI.Geocoding_API(Convert.ToString((data[7] / 60.0 + data[6]) / 60.0 + data[5]),
+                    Convert.ToString((data[10] / 60.0 + data[9]) / 60.0 + data[8]), ref temp_addr)==true)
                 {
                     if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second), temp_addr))
                     {

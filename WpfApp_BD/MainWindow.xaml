@@ -53,7 +53,7 @@
             <Label x:Name="label_zjxx_bsgl6" Content="6:" HorizontalAlignment="Left" Margin="603,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
             <Label x:Name="label_zjxx_bsgl5_text" Content="null" HorizontalAlignment="Left" Margin="510,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
             <Label x:Name="label_zjxx_bsgl5" Content="5:" HorizontalAlignment="Left" Margin="487,0,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-            <Label x:Name="label_zbdz" Content="" HorizontalAlignment="Left" Margin="684,101,-264,0" VerticalAlignment="Top" Height="39" Width="285" Panel.ZIndex="10" FontSize="14" Padding="0" HorizontalContentAlignment="Center"/>
+            <Label x:Name="label_zhdz" Content="" HorizontalAlignment="Left" Margin="684,101,-264,0" VerticalAlignment="Top" Height="39" Width="285" Panel.ZIndex="10" FontSize="14" Padding="0" HorizontalContentAlignment="Center"/>
         </Grid>
         <Label x:Name="label_gntx_sj" Content="时间:" HorizontalAlignment="Left" Margin="811,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
         <Label x:Name="label_gntx_sq_text" Content="null" HorizontalAlignment="Left" Margin="757,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>

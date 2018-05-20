@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.1*************************
+﻿/***********************Project Version1.2*************************
 @项目名:北斗传输4.0(C#)
 @File:MainWindow.xaml.cs
-@File_Version:1.0a
+@File_Version:1.2
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月16日02:25:23
+@UpdateTime:2018年5月21日04:05:25
 
 @说明:展示界面的动态显示
 
@@ -303,6 +303,14 @@ namespace WpfApp_BD
                 });
                 bdxx.print_flag &= ~BD.PRINT_GNPX;
 
+            }
+            if ((bdxx.print_flag & BD.PRINT_FIRST_ADDRESS) != 0)
+            {
+                UIAction(() =>
+                {
+                    label_zhdz.Content = bdxx.address;
+                });
+                bdxx.print_flag &= ~BD.PRINT_FIRST_ADDRESS;
             }
         }
 
