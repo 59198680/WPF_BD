@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.1*************************
+﻿/***********************Project Version1.3*************************
 @项目名:北斗传输4.0(C#)
 @File:MyDataBase.cs
-@File_Version:1.1
+@File_Version:1.3a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月21日03:20:37
+@UpdateTime:2018年5月24日05:50:08
 
 @说明:实现基本的数据库功能
 
@@ -26,7 +26,7 @@ namespace WpfApp_BD
 {
     class MyDataBase
     {
-        public MyDataBase( string str)
+        public MyDataBase(string str)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "数据库连接失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.ToString(), "数据库连接失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -54,7 +54,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "数据库读取失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.ToString(), "数据库读取失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -74,7 +74,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "数据库修改失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.ToString(), "数据库修改失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -96,7 +96,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "数据库查询失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.ToString(), "数据库查询失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -118,29 +118,37 @@ namespace WpfApp_BD
         //{
         //    return (new MyDataBase(  "select * from Message where m_message like'%" + key + "%' order by m_id  desc").MySelect());
         //}
-        //public static DataSet selectmessage( )
-        //{
-        //    return (new MyDataBase(  "select * from Message  order by m_id desc").MySelect());
-        //}
-        public static bool CheckBDID_exist( string id)
+        public static DataSet Select_UserId()
         {
-            bool ret = false;
-            return ret = (new MyDataBase(  "select * from ID where '" + id + "'=BD_CARD_ID ").MyRead());
+            return (new MyDataBase("select BD_Card_ID from ID").MySelect());
         }
-        public static bool Insertidcard( int ID, DateTime time)
+        public static DataSet Select_Data_For_Time(int ID, DateTime start, DateTime end)
+        {
+            return (new MyDataBase("select temper, MQ135,dateTime from Data where BD_Card_ID='" + ID + "' " + "and dateTime>'" + start.ToString() + "' and dateTime<'" + end.ToString() + "'").MySelect());
+        }
+        public static DataSet Select_Data_Top(int ID, int num)
+        {
+            return (new MyDataBase("select temper, MQ135,dateTime from Data where  BD_Card_ID='" + ID + "'" + " and num > (select max(num)-" + num + " from Data )").MySelect());
+        }
+        public static bool CheckBDID_exist(int id)
         {
             bool ret = false;
-            return ret = (new MyDataBase("insert into ID(BD_CARD_ID,Last_connettime) values(" + ID + "','" + time.ToString() + "')").MyModify());
+            return ret = (new MyDataBase("select * from ID where '" + id + "'=BD_CARD_ID ").MyRead());
+        }
+        public static bool Insertidcard(int ID, DateTime time)
+        {
+            bool ret = false;
+            return ret = (new MyDataBase("insert into ID(BD_CARD_ID,Last_connettime) values('" + ID + "','" + time.ToString() + "')").MyModify());
         }
         public static bool Updateidcard(int ID, DateTime time)
         {
             bool ret = false;
-            return ret = (new MyDataBase("update ID set Last_connettime='"+ time.ToString() + "' where BD_CARD_ID='"+ID+"'").MyModify());
+            return ret = (new MyDataBase("update ID set Last_connettime='" + time.ToString() + "' where BD_CARD_ID='" + ID + "'").MyModify());
         }
-        public static bool InsertData(int ID, float temp,float mq135,byte wd,byte wf,byte wm, byte jd,byte jf, byte jm,char wdfw,char jdfw,DateTime time,string Location)
+        public static bool InsertData(int ID, float temp, float mq135, byte wd, byte wf, byte wm, byte jd, byte jf, byte jm, char wdfw, char jdfw, DateTime time, string Location)
         {
             bool ret = false;
-            return ret = (new MyDataBase("insert into DATA(BD_Card_ID,Temper,MQ135,wd,wf,wm,jd,jf,jm,wdfw,jdfw,Location,dataTime) values('" + ID + "','" + temp + "','" + mq135 + "','" + wd + "','" + wf
+            return ret = (new MyDataBase("insert into Data(BD_Card_ID,Temper,MQ135,wd,wf,wm,jd,jf,jm,wdfw,jdfw,Location,dateTime) values('" + ID + "','" + temp + "','" + mq135 + "','" + wd + "','" + wf
                 + "','" + wm + "','" + jd + "','" + jf + "','" + jm + "','" + wdfw.ToString() + "','" + jdfw.ToString() + "','" + Location + "','" + time.ToString() + "')").MyModify());
         }
         public SqlConnection conn;

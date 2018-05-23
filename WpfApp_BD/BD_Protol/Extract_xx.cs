@@ -1,7 +1,7 @@
-﻿/***********************Project Version1.2*************************
+﻿/***********************Project Version1.3*************************
 @项目名:北斗传输4.0(C#)
 @File:Extract_xx.cs
-@File_Version:1.1
+@File_Version:1.1a
 @Author:lys
 @QQ:591986780
 @UpdateTime:2018年5月21日03:35:28

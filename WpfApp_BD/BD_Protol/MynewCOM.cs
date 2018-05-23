@@ -1,4 +1,4 @@
-﻿/***********************Project Version1.2*************************
+﻿/***********************Project Version1.3*************************
 @项目名:北斗传输4.0(C#)
 @File:COMInit.xmal.cs
 @File_Version:1.0a
@@ -120,7 +120,7 @@ namespace WpfApp_BD
                 }
                 //sendScrol.ScrollToBottom();//发送数据区滚动到底部
                 Sending = false;//关闭正在发送状态
-                _ComSend.Abort();//终止本线程
+               // _ComSend.Abort();//终止本线程
             }
 
         }

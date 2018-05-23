@@ -1,7 +1,7 @@
-﻿/***********************Project Version1.2*************************
+﻿/***********************Project Version1.3*************************
 @项目名:北斗传输4.0(C#)
 @File:BD.cs
-@File_Version:1.2
+@File_Version:1.2a
 @Author:lys
 @QQ:591986780
 @UpdateTime:2018年5月21日04:05:25
@@ -831,17 +831,26 @@ namespace BD_Protocol
                 char wdfw = (data[6] & 0x80) == 1 ? 'S' : 'N';
                 data[9] &= 0x7F;
                 data[6] &= 0x7F;
+                DateTime time = new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second);
+                if (!MyDataBase.CheckBDID_exist(id))
+                {
+                    MyDataBase.Insertidcard(id, time);
+                }
+                else
+                {
+                    MyDataBase.Updateidcard(id, time);
+                }
                 if (BaiduAPI.Geocoding_API(Convert.ToString((data[7] / 60.0 + data[6]) / 60.0 + data[5]),
                     Convert.ToString((data[10] / 60.0 + data[9]) / 60.0 + data[8]), ref temp_addr)==true)
                 {
-                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second), temp_addr))
+                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, time, temp_addr))
                     {
                         MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second), ""))
+                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, time, ""))
                     {
                         MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }

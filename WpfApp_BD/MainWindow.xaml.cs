@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.2*************************
+﻿/***********************Project Version1.3*************************
 @项目名:北斗传输4.0(C#)
 @File:MainWindow.xaml.cs
-@File_Version:1.2
+@File_Version:1.2a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月21日04:05:25
+@UpdateTime:2018年5月21日04:19:38
 
 @说明:展示界面的动态显示
 
@@ -235,9 +235,14 @@ namespace WpfApp_BD
                 else if (bdxx.fkxx.flbz == 8)
                     str = "抑制解除\n";
                 str += "  " + Convert.ToString(bdxx.gntx.hour) + ":" + Convert.ToString(bdxx.gntx.minute) + ":" + Convert.ToString(bdxx.gntx.second);
+
                 UIAction(() =>
                 {
-                    listbox_fkxx.Items.Insert(0, new ListBoxItem().Content = str);
+                    ListBoxItem temp = new ListBoxItem();
+                    temp.Content = str;
+                    temp.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+                    temp.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    listbox_fkxx.Items.Insert(0, temp);
                 });
                 bdxx.print_flag &= ~BD.PRINT_FKXX;
             }
@@ -268,13 +273,35 @@ namespace WpfApp_BD
                     label_gnvx_gwxgs_text.Content = Convert.ToString(bdxx.gnvx.gps_wxgs);
                     label_gnvx_bwxgs_text.Content = Convert.ToString(bdxx.gnvx.bds_wxgs);
                     listbox_gnvx_bwxxx.Items.Clear();
-                    listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
+                    ListBoxItem _temp = new ListBoxItem();
+                    _temp.Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)";
+                    _temp.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+                    _temp.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    listbox_gnvx_bwxxx.Items.Add(_temp);
                     listbox_gnvx_gwxxx.Items.Clear();
-                    listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)");
+                    ListBoxItem _temp2 = new ListBoxItem();
+                    _temp2.Content = "(卫星编号)(卫星仰角)(方位角)(信噪比)";
+                    _temp2.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+                    _temp2.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    listbox_gnvx_gwxxx.Items.Add(_temp2);
                     for (int i = 0; i < bdxx.gnvx.bds_wxgs; ++i)
-                        listbox_gnvx_bwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].xzb) + "db)");
+                    {
+                        ListBoxItem temp = new ListBoxItem();
+                        temp.Content = "(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.bds_wxxx[i].xzb) + "db)";
+                        temp.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+                        temp.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                        listbox_gnvx_bwxxx.Items.Add(temp);
+                    }
+
                     for (int i = 0; i < bdxx.gnvx.gps_wxgs; ++i)
-                        listbox_gnvx_gwxxx.Items.Add(new ListBoxItem().Content = "(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].xzb) + "db)");
+                    {
+                        ListBoxItem temp = new ListBoxItem();
+                        temp.Content = "(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxbh) + ")(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].wxyj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].fwj) + "°)(" + Convert.ToString(bdxx.gnvx.gps_wxxx[i].xzb) + "db)";
+                        temp.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+                        temp.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                        listbox_gnvx_gwxxx.Items.Add(temp);
+                    }
+
                 });
                 bdxx.print_flag &= ~BD.PRINT_GNVX;
             }
@@ -332,7 +359,7 @@ namespace WpfApp_BD
             catch (Exception)
             {
 
-               
+
             }
             System.Environment.Exit(0);
         }

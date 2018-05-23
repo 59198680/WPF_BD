@@ -128,7 +128,7 @@
         <Label x:Name="Label_Init_Copy4" Content="(反馈信息)FKXX:" Margin="708,341,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
         <Label x:Name="Label_djs" Content="倒计时:" Margin="426,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"/>
         <Label x:Name="label_djs_text" Content="0s" Margin="488,4,0,0" VerticalAlignment="Top" FontSize="22" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" FontWeight="Bold" Background="White" Foreground="Red"/>
-        <ListBox x:Name="listbox_fkxx" HorizontalAlignment="Left" Height="145" Margin="708,376,0,0" VerticalAlignment="Top" Width="323" Panel.ZIndex="10"/>
+        <ListBox x:Name="listbox_fkxx" HorizontalAlignment="Left" Height="145" Margin="708,376,0,0" VerticalAlignment="Top" Width="323" Panel.ZIndex="10" VerticalContentAlignment="Top"/>
         <Border BorderThickness="1" Height="182" Margin="20,561,403,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="-1"/>
         <Label x:Name="label_txxx" Content="通讯信息(TXXX)" Margin="40,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
         <Label x:Name="label_txxx_xxlb" Content="信息类别:" HorizontalAlignment="Left" Margin="63,580,0,0" VerticalAlignment="Top" Panel.ZIndex="10"/>
