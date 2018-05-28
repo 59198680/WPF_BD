@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="BD_Protol\MynewCOM.cs" />
     <Compile Include="BD_Protol\Receive_Protocol.cs" />
+    <Compile Include="WriteLog.cs" />
     <Page Include="COMInit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

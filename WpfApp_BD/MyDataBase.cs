@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.4*************************
+﻿/***********************Project Version1.5*************************
 @项目名:北斗传输4.0(C#)
 @File:MyDataBase.cs
-@File_Version:1.4a
+@File_Version:1.5a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月28日15:24:34
+@UpdateTime:2018年5月28日15:57:13
 
 @说明:实现基本的数据库功能
 
@@ -39,6 +39,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
+                WriteLog.WriteError(ex);
                 //MessageBox.Show(ex.ToString(), "数据库连接失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -54,6 +55,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
+                WriteLog.WriteError(ex);
                 //MessageBox.Show(ex.ToString(), "数据库读取失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -74,6 +76,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
+                WriteLog.WriteError(ex);
                 //MessageBox.Show(ex.ToString(), "数据库修改失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -95,6 +98,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
+                WriteLog.WriteError(ex);
                 //MessageBox.Show(ex.ToString(), "数据库修改失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -116,6 +120,7 @@ namespace WpfApp_BD
             }
             catch (Exception ex)
             {
+                WriteLog.WriteError(ex);
                 //MessageBox.Show(ex.ToString(), "数据库查询失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally

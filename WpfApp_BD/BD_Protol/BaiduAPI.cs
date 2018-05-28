@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.4*************************
+﻿/***********************Project Version1.5*************************
 @项目名:北斗传输4.0(C#)
 @File:BaiduAPI.cs
-@File_Version:1.1a
+@File_Version:1.5a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月21日03:19:42
+@UpdateTime:2018年5月28日15:57:00
 
 
 @说明:实现调用百度API实现坐标转换,地址输出
@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using WpfApp_BD;
 
 namespace BD_Protocol
 {
@@ -90,6 +91,7 @@ namespace BD_Protocol
             }
             catch (System.Exception ex)
             {
+                WriteLog.WriteError(ex);
                 //return "未获取到位置信息,连接出错";
                 result = "API调用失败";
                 return false;

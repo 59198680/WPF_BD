@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.4*************************
+﻿/***********************Project Version1.5*************************
 @项目名:北斗传输4.0(C#)
 @File:MainWindow.xaml.cs
-@File_Version:1.4a
+@File_Version:1.5a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月28日15:24:42
+@UpdateTime:2018年5月28日15:56:43
 
 @说明:展示界面的动态显示
 
@@ -83,7 +83,7 @@ namespace WpfApp_BD
                 DispatcherFrame frame = new DispatcherFrame();
                 Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(ExitFrames), frame);
                 try { Dispatcher.PushFrame(frame); }
-                catch (InvalidOperationException) { }
+                catch (InvalidOperationException ex) { WriteLog.WriteError(ex); }
             }
             private static object ExitFrames(object frame)
             {
@@ -360,9 +360,9 @@ namespace WpfApp_BD
             {
                 bdxx.mycom.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                WriteLog.WriteError(ex);
 
             }
             System.Environment.Exit(0);
@@ -376,14 +376,23 @@ namespace WpfApp_BD
         /// <returns></returns>
         private string strToHexByte(string hexString)
         {
-            byte[] bs = null;
-            bs = System.Text.Encoding.ASCII.GetBytes(hexString.Trim());
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bs.Length; i++)
+            try
             {
-                sb.AppendFormat("{0:x2}" + " ", bs[i]);
+                byte[] bs = null;
+                bs = System.Text.Encoding.ASCII.GetBytes(hexString.Trim());
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < bs.Length; i++)
+                {
+                    sb.AppendFormat("{0:x2}" + " ", bs[i]);
+                }
+                return sb.ToString();
             }
-            return sb.ToString();
+            catch (Exception ex)
+            {
+
+                WriteLog.WriteError(ex);
+            }
+            return "";
         }
         /// <summary>
         /// 将一条十六进制字符串转换为ASCII
@@ -392,25 +401,34 @@ namespace WpfApp_BD
         /// <returns>返回一条ASCII码</returns>
         public static string HexStringToASCII(string hexstring)
         {
-            byte[] bt = HexStringToBinary(hexstring);
-            string lin = "";
-            for (int i = 0; i < bt.Length; i++)
+            try
             {
-                lin = lin + bt[i] + " ";
+                byte[] bt = HexStringToBinary(hexstring);
+                string lin = "";
+                for (int i = 0; i < bt.Length; i++)
+                {
+                    lin = lin + bt[i] + " ";
+                }
+
+
+                string[] ss = lin.Trim().Split(new char[] { ' ' });
+                char[] c = new char[ss.Length];
+                int a;
+                for (int i = 0; i < c.Length; i++)
+                {
+                    a = Convert.ToInt32(ss[i]);
+                    c[i] = Convert.ToChar(a);
+                }
+
+                string b = new string(c);
+                return b;
             }
-
-
-            string[] ss = lin.Trim().Split(new char[] { ' ' });
-            char[] c = new char[ss.Length];
-            int a;
-            for (int i = 0; i < c.Length; i++)
+            catch (Exception ex)
             {
-                a = Convert.ToInt32(ss[i]);
-                c[i] = Convert.ToChar(a);
-            }
 
-            string b = new string(c);
-            return b;
+                WriteLog.WriteError(ex);
+            }
+            return "";
         }
         /**/
         /// <summary>
@@ -420,13 +438,22 @@ namespace WpfApp_BD
         /// <returns>返回一个二进制字符串</returns>
         public static byte[] HexStringToBinary(string hexstring)
         {
-            string[] tmpary = hexstring.Trim().Split(' ');
-            byte[] buff = new byte[tmpary.Length];
-            for (int i = 0; i < buff.Length; i++)
+            try
             {
-                buff[i] = Convert.ToByte(tmpary[i], 16);
+                string[] tmpary = hexstring.Trim().Split(' ');
+                byte[] buff = new byte[tmpary.Length];
+                for (int i = 0; i < buff.Length; i++)
+                {
+                    buff[i] = Convert.ToByte(tmpary[i], 16);
+                }
+                return buff;
             }
-            return buff;
+            catch ( Exception ex)
+            {
+
+                WriteLog.WriteError(ex);
+            }
+            return null;
         }
 
 
@@ -465,66 +492,93 @@ namespace WpfApp_BD
 
         void LoadID()
         {
-            DataSet ds2 = MyDataBase.Select_UserId();
-            DataSetToList_For_UserId(ds2, 0);
-            cbb_id.ItemsSource = Cbb_id;
-            cbb_id.SelectedValuePath = "Key";
-            //cbb_id.DisplayMemberPath = "Value";
-            cbb_id.SelectedIndex = -1;
+            try
+            {
+                DataSet ds2 = MyDataBase.Select_UserId();
+                DataSetToList_For_UserId(ds2, 0);
+                cbb_id.ItemsSource = Cbb_id;
+                cbb_id.SelectedValuePath = "Key";
+                //cbb_id.DisplayMemberPath = "Value";
+                cbb_id.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+
+                WriteLog.WriteError(ex);
+            }
+
         }
         public void DataSetToList_For_UserId(DataSet ds, int tableIndext)
         {
+            try
+            {
+                if (ds == null || ds.Tables.Count <= 0 || tableIndext < 0)
+                {
+                    return;
+                }
+                DataTable dt = ds.Tables[tableIndext]; //取得DataSet里的一个下标为tableIndext的表，然后赋给dt  
+                Cbb_id = new List<string>();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i][0] != DBNull.Value)
+                    {
+                        Cbb_id.Add(Convert.ToString(dt.Rows[i][0]));
+                    }
+                    else
+                    {
+                        Cbb_id.Add("");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                WriteLog.WriteError(ex);
+            }
             //确认参数有效  
-            if (ds == null || ds.Tables.Count <= 0 || tableIndext < 0)
-            {
-                return;
-            }
-            DataTable dt = ds.Tables[tableIndext]; //取得DataSet里的一个下标为tableIndext的表，然后赋给dt  
-            Cbb_id = new List<string>();
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                if (dt.Rows[i][0] != DBNull.Value)
-                {
-                    Cbb_id.Add(Convert.ToString(dt.Rows[i][0]));
-                }
-                else
-                {
-                    Cbb_id.Add("");
-                }
-            }
+            
         }
         List<string> Cbb_id { get; set; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(e.Source is Button)
+            try
             {
-                if (!isfirstrun)
+                if (e.Source is Button)
                 {
-                    int id=Convert.ToInt32(cbb_id.SelectedItem);
-                    //MessageBox.Show(cbb_zlgn.Text);
-                    if(cbb_zlgn.Text.Equals("重启"))
+                    if (!isfirstrun)
                     {
-                        byte[] aaa = new byte[1];
-                        UCHR[] _id = new UCHR[3];
-                        _id[0] = Convert.ToByte((id >> 16)&0xff);
-                        _id[1] = Convert.ToByte((id >> 8) & 0xff);
-                        _id[2] = Convert.ToByte(id  & 0xff);
-                        aaa[0] = 1;
-                        bdxx.BD_send(ref aaa, ( UINT)(1), _id);
-                    }
-                    if (cbb_zlgn.Text.Equals("蜂鸣一秒"))
-                    {
-                        byte[] aaa = new byte[1];
-                        UCHR[] _id = new UCHR[3];
-                        _id[0] = Convert.ToByte((id >> 16) & 0xff);
-                        _id[1] = Convert.ToByte((id >> 8) & 0xff);
-                        _id[2] = Convert.ToByte(id & 0xff);
-                        aaa[0] = 2;
-                        bdxx.BD_send(ref aaa, (UINT)(1), _id);
+                        int id = Convert.ToInt32(cbb_id.SelectedItem);
+                        //MessageBox.Show(cbb_zlgn.Text);
+                        if (cbb_zlgn.Text.Equals("重启"))
+                        {
+                            byte[] aaa = new byte[1];
+                            UCHR[] _id = new UCHR[3];
+                            _id[0] = Convert.ToByte((id >> 16) & 0xff);
+                            _id[1] = Convert.ToByte((id >> 8) & 0xff);
+                            _id[2] = Convert.ToByte(id & 0xff);
+                            aaa[0] = 1;
+                            bdxx.BD_send(ref aaa, (UINT)(1), _id);
+                        }
+                        if (cbb_zlgn.Text.Equals("蜂鸣一秒"))
+                        {
+                            byte[] aaa = new byte[1];
+                            UCHR[] _id = new UCHR[3];
+                            _id[0] = Convert.ToByte((id >> 16) & 0xff);
+                            _id[1] = Convert.ToByte((id >> 8) & 0xff);
+                            _id[2] = Convert.ToByte(id & 0xff);
+                            aaa[0] = 2;
+                            bdxx.BD_send(ref aaa, (UINT)(1), _id);
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+
+                WriteLog.WriteError(ex);
+            }
+            
         }
         bool isfirstrun = true;
     }

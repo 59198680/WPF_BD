@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.4*************************
+﻿/***********************Project Version1.5*************************
 @项目名:北斗传输4.0(C#)
 @File:COMInit.xmal.cs
-@File_Version:1.0a
+@File_Version:1.5a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月16日02:25:23
+@UpdateTime:2018年5月28日15:57:07
 
 @说明:实现串口的基本功能
 
@@ -56,9 +56,10 @@ namespace WpfApp_BD
             {
                 ComPort.Open();//打开串口
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.ToString() + "无法打开，原因未知！");
+                WriteLog.WriteError(ex);
+                MessageBox.Show(ex.ToString() + "无法打开，原因未知！");
                 //MessageBox.Show("无法打开串口,请检测此串口是否有效或被其他占用！");
                 res = false;
                 throw;
@@ -73,9 +74,10 @@ namespace WpfApp_BD
             {
                 ComPort.Close();//打开串口
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.ToString() + "无法关闭，原因未知！");
+                WriteLog.WriteError(ex);
+                MessageBox.Show(ex.ToString() + "无法关闭，原因未知！");
                 //MessageBox.Show("无法打开串口,请检测此串口是否有效或被其他占用！");
                 res = false;
                 throw;
@@ -114,9 +116,10 @@ namespace WpfApp_BD
 
 
                 }
-                catch (Exception e)//如果无法发送，产生异常
+                catch (Exception ex)//如果无法发送，产生异常
                 {
-                    MessageBox.Show(e.ToString() + "无法接收数据，原因未知！");
+                    WriteLog.WriteError(ex);
+                    MessageBox.Show(ex.ToString() + "无法接收数据，原因未知！");
                 }
                 //sendScrol.ScrollToBottom();//发送数据区滚动到底部
                 Sending = false;//关闭正在发送状态
@@ -144,10 +147,11 @@ namespace WpfApp_BD
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog.WriteError(ex);
 
-                MessageBox.Show(e.ToString() + "无法接收数据，原因未知！");
+                MessageBox.Show(ex.ToString() + "无法接收数据，原因未知！");
             }
         }
     }

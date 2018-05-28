@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.4*************************
+﻿/***********************Project Version1.5*************************
 @项目名:北斗传输4.0(C#)
 @File:COMInit.xmal.cs
-@File_Version:1.0a
+@File_Version:1.5a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月16日02:25:23
+@UpdateTime:2018年5月28日15:56:33
 
 @说明:实现串口界面
 
@@ -135,9 +135,10 @@ namespace WpfApp_BD
                 MainWindow window = new MainWindow(bdxx);
                 window.ShowDialog();
             }
-            catch//如果串口被其他占用，则无法打开
+            catch(Exception ex)//如果串口被其他占用，则无法打开
             {
                 MessageBox.Show("无法打开串口,请检测此串口是否有效或被其他占用！");
+                WriteLog.WriteError(ex);
                 GetPort();//刷新当前可用串口
                 return;//无法打开串口，提示后直接返回
             }
