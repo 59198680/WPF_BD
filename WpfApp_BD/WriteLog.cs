@@ -36,7 +36,7 @@ namespace WpfApp_BD
                 {
                     Directory.CreateDirectory(directPath);
                 }
-                directPath += string.Format(@"\{0}.log", DateTime.Now.ToString("yyyy-MM-dd"));
+                directPath += string.Format(@"\WpfApp_BD_{0}_ERROR.log", DateTime.Now.ToString("yyyy-MM-dd"));
                 if (streamWriter == null)
                 {
                     streamWriter = !File.Exists(directPath) ? File.CreateText(directPath) : File.AppendText(directPath);    //判断文件是否存在如果不存在则创建，如果存在则添加。  
