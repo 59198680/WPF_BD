@@ -116,7 +116,7 @@ namespace WpfApp_BD
                 da.SelectCommand = comm;
                 ds = new DataSet();
                 da.Fill(ds);
-                dr.Close();
+                //dr.Close();
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace WpfApp_BD
             return ds;
         }
 
-        public static DataSet Select_UserId()
+         public static DataSet Select_UserId()
         {
             return (new MyDataBase("select BD_Card_ID from ID").MySelect());
         }
@@ -248,12 +248,12 @@ namespace WpfApp_BD
         }
         public static bool CreateView(int ID, float tma, float tmi, float hma, float hmi, float mq135ma, float mq135mi)
         {
-            string createDbStr = "CREATE VIEW View_" + ID + "_Alarm AS " +
+            string createDbStr = "CREATE VIEW View_"+ID+"_Alarm AS " +
                 "SELECT num,BD_Card_ID,Temperature,Humidity,MQ135,Location,dateTime " +
-                "FROM UserID_" + ID + "_Data " +
-                "WHERE BD_Card_ID='" + ID + "' " +
-                "and ( Temperature>'" + tma + "' " +
-                "or Temperature<'" + tmi + "' " +
+                "FROM UserID_"+ID+"_Data " +
+                "WHERE BD_Card_ID='"+ID+"' " +
+                "and ( Temperature>'"+tma+"' "+
+                "or Temperature<'"+tmi+"' "+
                 "or Humidity>'" + hma + "' " +
                 "or Humidity<'" + hmi + "' " +
                 "or MQ135>'" + mq135ma + "' " +
@@ -263,7 +263,7 @@ namespace WpfApp_BD
         }
         public static DataSet Select_View(int ID)
         {
-            return (new MyDataBase("select * from View_" + ID + "_Alarm").MySelect());
+            return (new MyDataBase("select * from View_"+ID+"_Alarm").MySelect());
         }
     }
 }
