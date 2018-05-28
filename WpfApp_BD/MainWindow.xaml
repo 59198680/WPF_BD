@@ -5,12 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_BD"
         mc:Ignorable="d"
-        Title="北斗开发者选项" Height="847" Width="1080" FontSize="16" FontFamily="Microsoft YaHei UI Light" ResizeMode="CanMinimize" BorderThickness="0" Foreground="Black" Background="White" Closed="Window_Closed" Loaded="Window_Loaded">
+        Title="北斗短报文系统服务器端V1.4" Height="847" Width="1080" FontSize="16" FontFamily="Microsoft YaHei UI Light" ResizeMode="CanMinimize" BorderThickness="0" Foreground="Black" Background="White" Closed="Window_Closed" Loaded="Window_Loaded">
     <Grid>
-        <Button x:Name="btnicjc" Content="自爆指令" HorizontalAlignment="Left" Margin="965,697,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="75"/>
         <Label x:Name="Label_Init" Content="状态:" Margin="128,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"/>
         <Label x:Name="Label_Init_text" Content="未初始化" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
-        <Button x:Name="btnxjzj" Content="自毁指令" HorizontalAlignment="Left" Margin="965,668,0,0" VerticalAlignment="Top" Panel.ZIndex="10" Width="75"/>
         <Grid Margin="60,59,20,590" Panel.ZIndex="9">
             <Label x:Name="label_icxx_yhid" Content="用户ID:" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left"/>
             <Label x:Name="label_icxx_yhid_text" Content="null" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10" HorizontalAlignment="Left" Margin="61,0,0,0" Width="92"/>
@@ -61,7 +59,6 @@
         <Label x:Name="label_gntx_sj_text" Content="null" HorizontalAlignment="Left" Margin="848,10,0,0" VerticalAlignment="Top" FontSize="16" Panel.ZIndex="10"/>
         <Border BorderThickness="1" Height="38" Margin="20,54,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="1"/>
         <Border BorderThickness="1" Height="80" Margin="20,117,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="1"/>
-        <Button x:Name="btnsend" Content="发射!" HorizontalAlignment="Left" Margin="966,639,0,0" VerticalAlignment="Top" Width="75" Panel.ZIndex="10"/>
         <Label x:Name="Label_Init_Copy" Content="IC检测(ICXX)" Margin="40,36,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="2" HorizontalAlignment="Left" Background="White"/>
         <Label x:Name="Label_Init_Copy1" Content="系统自检(ZJXX):" Margin="40,101,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
         <Border BorderThickness="1" Height="119" Margin="20,219,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4"/>
@@ -146,18 +143,17 @@
         <TextBox x:Name="textbox_txxx_dwnr" HorizontalAlignment="Left" Height="132" Margin="283,584,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="356" Panel.ZIndex="10"/>
         <Label x:Name="label_txxx_lasttime" Content="最后通讯:" Margin="350,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White" Width="78"/>
         <Label x:Name="label_txxx_lasttime_text" Content="" Margin="426,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
-        <ComboBox x:Name="combox_baudrate" HorizontalAlignment="Left" Margin="840,752,0,0" VerticalAlignment="Top" Width="120" Panel.ZIndex="10" SelectedIndex="7">
-            <ComboBoxItem Content="1200"/>
-            <ComboBoxItem Content="2400"/>
-            <ComboBoxItem Content="4800"/>
-            <ComboBoxItem Content="9600"/>
-            <ComboBoxItem Content="19200"/>
-            <ComboBoxItem Content="38400"/>
-            <ComboBoxItem Content="57600"/>
-            <ComboBoxItem Content="115200"/>
+        <Label x:Name="label_fszl" Content="发送指令" Margin="720,545,0,0" VerticalAlignment="Top" FontSize="16" AutomationProperties.HelpText="123" Panel.ZIndex="10" HorizontalAlignment="Left" Background="White"/>
+        <Border BorderThickness="1" Height="182" Margin="688,561,20,0" VerticalAlignment="Top" BorderBrush="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" CornerRadius="4" Panel.ZIndex="-1"/>
+        <ComboBox x:Name="cbb_id" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="801,600,0,0" Panel.ZIndex="14"/>
+
+        <Button x:Name="btn_send" Content="发送" HorizontalAlignment="Left" Margin="936,633,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Label Content="发送ID:" HorizontalAlignment="Left" Margin="740,596,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cbb_zlgn" HorizontalAlignment="Left" Margin="801,662,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="重启" IsSelected="True"/>
+            <ComboBoxItem Content="蜂鸣一秒"/>
         </ComboBox>
-        <Button x:Name="btn_setcombaud" Content="发射!" HorizontalAlignment="Left" Margin="965,741,0,0" VerticalAlignment="Top" Width="75" Panel.ZIndex="10" Click="btn_setcombaud_Click"/>
-        <Button x:Name="btn_setbdbaud" Content="发射!" HorizontalAlignment="Left" Margin="965,770,0,0" VerticalAlignment="Top" Width="75" Panel.ZIndex="10"/>
+        <Label Content="指令功能:" HorizontalAlignment="Left" Margin="723,658,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

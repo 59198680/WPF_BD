@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.3*************************
+﻿/***********************Project Version1.4*************************
 @项目名:北斗传输4.0(C#)
 @File:BD.cs
-@File_Version:1.2a
+@File_Version:1.4a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月21日04:05:25
+@UpdateTime:2018年5月28日15:23:35
 
 @说明:实现基本功能
 
@@ -405,13 +405,13 @@ namespace BD_Protocol
                         status = (byte)((STEP_NONE + 1) | STATUS_BIT_ANSWER);
                         break;
                     default:
-                        byte[] aaa = new byte[255];
-                        byte[] id = { 0x04, 0x7c, 0x66 };
-                        for (int i = 0; i < 10; ++i)
-                        {
-                            aaa[i] = (byte)(i + 0x30);
-                        }
-                        this.BD_send(ref aaa, (UINT)(10), id);
+                        //byte[] aaa = new byte[255];
+                        //byte[] id = { 0x04, 0x7c, 0x66 };
+                        //for (int i = 0; i < 10; ++i)
+                        //{
+                        //    aaa[i] = (byte)(i + 0x30);
+                        //}
+                        //this.BD_send(ref aaa, (UINT)(10), id);
                         break;
                 }
             }
@@ -574,7 +574,7 @@ namespace BD_Protocol
 
         public void BD_send(ref UCHR[] buffer, UINT len, UCHR[] dis)
         {
-            if (BSGL != 0 && error_flag == 0 && SEND_BLOCKTIME == 0 && len > 0)
+            if (len > 0)//BSGL != 0 && error_flag == 0 &&SEND_BLOCKTIME == 0 &&
             {
                 UCHR[] send_buffer;
                 send_buffer = new UCHR[len + DATA_FIRM_LENTH];
@@ -590,7 +590,7 @@ namespace BD_Protocol
         void TXSQ_send(UCHR[] buffer, UINT len, UCHR[] dis)
         {
             UINT lenth = BD_TXSQ.lenth + len, i = 0; ;
-            // UCHR[] sendbuffer = Encoding.Default.GetBytes("$TXSQ0?00000?");//最多只能发送210字节,这张卡时628bit
+            // UCHR[] sendbuffer = Encoding.Default.GetBytes("$TXSQ0?00000?");//最多只能发送210字节,这张卡是628bit
             UCHR[] sendbuffer = new UCHR[lenth];
             sendbuffer[0] = (byte)'$';
             sendbuffer[1] = (byte)'T';
@@ -818,47 +818,73 @@ namespace BD_Protocol
         void DATA_Handler(ref UCHR[] fxfdz, ref UCHR h, ref UCHR m, ref UCHR[] data, ref UINT lenth)
         {
             //TODO
-            if (data[0] == 0)//短报文
-            {
-                int id = (fxfdz[0] << 16) | (fxfdz[1] << 8) | fxfdz[2];
-                float temp = (float)(((Convert.ToUInt16(data[1] & 0x7f) << 8) | data[2]) / 1000.0);
-                if ((data[1] & 0x80) == 1)
-                {
-                    temp *= -1;
-                }
-                float mq135 = (float)(((Convert.ToUInt16(data[3]) << 8) | data[4]) / 10000.0);
-                char jdfw = (data[9] & 0x80) == 1 ? 'W' : 'E';
-                char wdfw = (data[6] & 0x80) == 1 ? 'S' : 'N';
-                data[9] &= 0x7F;
-                data[6] &= 0x7F;
-                DateTime time = new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second);
-                if (!MyDataBase.CheckBDID_exist(id))
-                {
-                    MyDataBase.Insertidcard(id, time);
-                }
-                else
-                {
-                    MyDataBase.Updateidcard(id, time);
-                }
-                if (BaiduAPI.Geocoding_API(Convert.ToString((data[7] / 60.0 + data[6]) / 60.0 + data[5]),
-                    Convert.ToString((data[10] / 60.0 + data[9]) / 60.0 + data[8]), ref temp_addr)==true)
-                {
-                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, time, temp_addr))
-                    {
-                        MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                else
-                {
-                    if (!MyDataBase.InsertData(id, temp, mq135, data[5], data[6], data[7], data[8], data[9], data[10], wdfw, jdfw, time, ""))
-                    {
-                        MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+            int ex_i = 0;
+            if (data[0] == 1)
+                ex_i = 4;
 
+
+            int id = (fxfdz[0] << 16) | (fxfdz[1] << 8) | fxfdz[2];
+            float temp = (float)(data[ex_i + 1] / 1.0);
+            if (data[ex_i + 2] < 10)
+                temp += (float)(data[ex_i + 2] / 10.0);
+            else
+                temp += (float)(data[ex_i + 2] / 100.0);
+            float humi = (float)(data[ex_i + 3] / 1.0);
+            if (data[ex_i + 4] < 10)
+                humi += (float)(data[ex_i + 4] / 10.0);
+            else
+                humi += (float)(data[ex_i + 4] / 100.0);
+            float mq135 = (float)(((Convert.ToUInt16(data[ex_i + 5]) << 8) | data[ex_i + 6]) / 10000.0);
+            char jdfw = (data[ex_i + 11] & 0x80) == 1 ? 'W' : 'E';
+            char wdfw = (data[ex_i + 8] & 0x80) == 1 ? 'S' : 'N';
+            data[ex_i + 11] &= 0x7F;
+            data[ex_i + 8] &= 0x7F;
+            DateTime time = new DateTime(Convert.ToInt32(gntx.year), gntx.month, gntx.day, gntx.hour, gntx.minute, gntx.second);
+            if (!MyDataBase.CheckBDID_exist(id))//检查ID存不存在,存在则更新
+            {
+                if (data[0] == 1)
+                    MyDataBase.Insertidcard(id, time, data[1], data[2], data[3], data[4]);
+                else
+                    MyDataBase.Insertidcard(id, time);
+                if (!MyDataBase.IsTableExist("UserID_" + Convert.ToString(id) + "_Data"))//检查数据表存不存在,不存在则创建
+                {
+                    if (!MyDataBase.New_tb_for_id_data(id))
+                    {
+                        MessageBox.Show("", "建表失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                if (!MyDataBase.CheckAlarm_isexist(id))//检查Alarm表ID存不存在
+                {
+                    MyDataBase.Insertid_ToAlarm(id);
+                }
             }
+            else
+            {
+                if (data[0] == 1)
+                    MyDataBase.Updateidcard(id, time, data[1], data[2], data[3], data[4]);
+                else
+                    MyDataBase.Updateidcard(id, time);
+            }
+
+            if (BaiduAPI.Geocoding_API(Convert.ToString((data[ex_i + 9] / 60.0 + data[ex_i + 8]) / 60.0 + data[ex_i + 7]),
+                Convert.ToString((data[ex_i + 12] / 60.0 + data[ex_i + 11]) / 60.0 + data[ex_i + 10]), ref temp_addr) == true)
+            {
+                if (!MyDataBase.InsertData(id, temp, humi, mq135, data[ex_i + 7], data[ex_i + 8], data[ex_i + 9], data[ex_i + 10], data[ex_i + 11], data[ex_i + 12], wdfw, jdfw, time, temp_addr))
+                {
+                    MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                if (!MyDataBase.InsertData(id, temp, humi, mq135, data[ex_i + 7], data[ex_i + 8], data[ex_i + 9], data[ex_i + 10], data[ex_i + 11], data[ex_i + 12], wdfw, jdfw, time, ""))
+                {
+                    MessageBox.Show("", "插入失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
         }
     }
-
-
 }
+
+
+

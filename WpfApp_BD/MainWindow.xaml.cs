@@ -1,10 +1,10 @@
-﻿/***********************Project Version1.3*************************
+﻿/***********************Project Version1.4*************************
 @项目名:北斗传输4.0(C#)
 @File:MainWindow.xaml.cs
-@File_Version:1.2a
+@File_Version:1.4a
 @Author:lys
 @QQ:591986780
-@UpdateTime:2018年5月21日04:19:38
+@UpdateTime:2018年5月28日15:24:42
 
 @说明:展示界面的动态显示
 
@@ -15,6 +15,7 @@
 ******************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Permissions;
 using System.Text;
@@ -33,6 +34,8 @@ using System.Windows.Threading;
 using BD_Protocol;
 namespace WpfApp_BD
 {
+    using UINT = System.UInt32;
+    using UCHR = System.Byte;
     public class Box
     {
         public BD bdxx;
@@ -57,18 +60,19 @@ namespace WpfApp_BD
         {
             bdxx = b;
             InitializeComponent();
-
+            isfirstrun = false;
         }
-        System.Timers.Timer timer_extract;
+        System.Timers.Timer timer_update;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //autoTick.Tick += new EventHandler(Seamphore_thread);//定时中断
             //autoTick.Interval = TimeSpan.FromMilliseconds(200);//设置自动间隔
             //autoTick.Start();//开启自动
-            timer_extract = new System.Timers.Timer(500);//实例化Timer类，设置间隔时间为100毫秒；     
-            timer_extract.Elapsed += new System.Timers.ElapsedEventHandler(Seamphore_thread);//到达时间的时候执行事件；   
-            timer_extract.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
-            timer_extract.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
+            LoadID();
+            timer_update = new System.Timers.Timer(500);//实例化Timer类，设置间隔时间为100毫秒；     
+            timer_update.Elapsed += new System.Timers.ElapsedEventHandler(Seamphore_thread);//到达时间的时候执行事件；   
+            timer_update.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；     
+            timer_update.Enabled = true;//需要调用 timer.Start()或者timer.Enabled = true来启动它， timer.Start()的内部原理还是设置timer.Enabled = true;
         }
 
         public static class DispatcherHelper
@@ -459,6 +463,69 @@ namespace WpfApp_BD
 
         }
 
+        void LoadID()
+        {
+            DataSet ds2 = MyDataBase.Select_UserId();
+            DataSetToList_For_UserId(ds2, 0);
+            cbb_id.ItemsSource = Cbb_id;
+            cbb_id.SelectedValuePath = "Key";
+            //cbb_id.DisplayMemberPath = "Value";
+            cbb_id.SelectedIndex = -1;
+        }
+        public void DataSetToList_For_UserId(DataSet ds, int tableIndext)
+        {
+            //确认参数有效  
+            if (ds == null || ds.Tables.Count <= 0 || tableIndext < 0)
+            {
+                return;
+            }
+            DataTable dt = ds.Tables[tableIndext]; //取得DataSet里的一个下标为tableIndext的表，然后赋给dt  
+            Cbb_id = new List<string>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i][0] != DBNull.Value)
+                {
+                    Cbb_id.Add(Convert.ToString(dt.Rows[i][0]));
+                }
+                else
+                {
+                    Cbb_id.Add("");
+                }
+            }
+        }
+        List<string> Cbb_id { get; set; }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(e.Source is Button)
+            {
+                if (!isfirstrun)
+                {
+                    int id=Convert.ToInt32(cbb_id.SelectedItem);
+                    //MessageBox.Show(cbb_zlgn.Text);
+                    if(cbb_zlgn.Text.Equals("重启"))
+                    {
+                        byte[] aaa = new byte[1];
+                        UCHR[] _id = new UCHR[3];
+                        _id[0] = Convert.ToByte((id >> 16)&0xff);
+                        _id[1] = Convert.ToByte((id >> 8) & 0xff);
+                        _id[2] = Convert.ToByte(id  & 0xff);
+                        aaa[0] = 1;
+                        bdxx.BD_send(ref aaa, ( UINT)(1), _id);
+                    }
+                    if (cbb_zlgn.Text.Equals("蜂鸣一秒"))
+                    {
+                        byte[] aaa = new byte[1];
+                        UCHR[] _id = new UCHR[3];
+                        _id[0] = Convert.ToByte((id >> 16) & 0xff);
+                        _id[1] = Convert.ToByte((id >> 8) & 0xff);
+                        _id[2] = Convert.ToByte(id & 0xff);
+                        aaa[0] = 2;
+                        bdxx.BD_send(ref aaa, (UINT)(1), _id);
+                    }
+                }
+            }
+        }
+        bool isfirstrun = true;
     }
 }
